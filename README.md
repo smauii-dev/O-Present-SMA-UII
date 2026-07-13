@@ -403,5 +403,5 @@ Kontribusi untuk penyempurnaan aplikasi ini sangat dihargai. Jika Anda menemukan
 
 ## Credits
 
-> Made by [Josephine](https://josephines1.github.io/), dikembangkan dan diperbarui oleh Rosyiii.
+> Made by [Josephine](https://josephines1.github.io/), dikembangkan dan diperbarui oleh [Rosyiii](https://github.com/Rosyiii).
 > Template by [tabler.io](tabler.io)
