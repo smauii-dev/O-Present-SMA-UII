@@ -43,10 +43,10 @@ class JabatanModel extends Model
         } elseif ($keyword) {
             $countQuery = clone $this->builder;
 
-            $total = $countQuery->like('jabatan', $keyword)
+            $total = $countQuery->ilike('jabatan', $keyword)
                 ->countAllResults();
 
-            $result = $this->builder->like('jabatan', $keyword)
+            $result = $this->builder->ilike('jabatan', $keyword)
                 ->get($perPage, $offset)
                 ->getResult();
         } else {

@@ -130,9 +130,9 @@ class PresensiModel extends Model
 
         if ($filter_bulan || $filter_tahun) {
             $bulan_filter = $filter_tahun . '-' . $filter_bulan;
-            $this->builder->where('DATE_FORMAT(presensi.tanggal_masuk, "%Y-%m") = ' . "'" . $bulan_filter . "'");
+            $this->builder->where("TO_CHAR(presensi.tanggal_masuk, 'YYYY-MM') = '" . $bulan_filter . "'");
         } else {
-            $this->builder->where('DATE_FORMAT(presensi.tanggal_masuk, "%Y-%m") = ' . "'" . $bulan_sekarang . "'");
+            $this->builder->where("TO_CHAR(presensi.tanggal_masuk, 'YYYY-MM') = '" . $bulan_sekarang . "'");
         }
 
         $countQuery = clone $this->builder;
@@ -156,7 +156,7 @@ class PresensiModel extends Model
     public function getMinYear()
     {
         $builder = $this->db->table('presensi');
-        $builder->selectMin('YEAR(tanggal_masuk)', 'min_year');
+        $builder->selectMin('EXTRACT(YEAR FROM tanggal_masuk)', 'min_year');
         $query = $builder->get();
 
         $result = $query->getRow();
