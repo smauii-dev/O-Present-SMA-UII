@@ -60,12 +60,12 @@ class KetidakhadiranModel extends Model
             if ($filter_keyword) {
                 if ($id_pegawai) {
                     $this->builder->groupStart()
-                        ->like('deskripsi', $filter_keyword)
+                        ->ilike('deskripsi', $filter_keyword)
                         ->groupEnd();
                 } else {
                     $this->builder->groupStart()
-                        ->like('nama', $filter_keyword)
-                        ->orLike('deskripsi', $filter_keyword)
+                        ->ilike('nama', $filter_keyword)
+                        ->orIlike('deskripsi', $filter_keyword)
                         ->groupEnd();
                 }
             }
@@ -73,15 +73,15 @@ class KetidakhadiranModel extends Model
             if ($filter_bulan !== null && $filter_tahun !== null) {
                 $bulan_filter = $filter_tahun . '-' . $filter_bulan;
                 $this->builder->groupStart()
-                    ->where('DATE_FORMAT(tanggal_mulai, "%Y-%m")', $bulan_filter)
-                    ->orwhere('DATE_FORMAT(tanggal_berakhir, "%Y-%m")', $bulan_filter)
+                    ->where("TO_CHAR(tanggal_mulai, 'YYYY-MM') = '" . $bulan_filter . "'")
+                    ->orWhere("TO_CHAR(tanggal_berakhir, 'YYYY-MM') = '" . $bulan_filter . "'")
                     ->groupEnd();
             }
 
             if ($filter_bulan === null && $filter_tahun === null) {
                 $this->builder->groupStart()
-                    ->where('DATE_FORMAT(tanggal_mulai, "%Y-%m")', $bulan_sekarang)
-                    ->orWhere('DATE_FORMAT(tanggal_berakhir, "%Y-%m")', $bulan_sekarang)
+                    ->where("TO_CHAR(tanggal_mulai, 'YYYY-MM') = '" . $bulan_sekarang . "'")
+                    ->orWhere("TO_CHAR(tanggal_berakhir, 'YYYY-MM') = '" . $bulan_sekarang . "'")
                     ->groupEnd();
             }
         }
@@ -147,7 +147,7 @@ class KetidakhadiranModel extends Model
 
     public function getMinYear()
     {
-        $this->builder->selectMin('YEAR(tanggal_mulai)', 'min_year');
+        $this->builder->selectMin('EXTRACT(YEAR FROM tanggal_mulai)', 'min_year');
         $query = $this->builder->get();
 
         $result = $query->getRow();

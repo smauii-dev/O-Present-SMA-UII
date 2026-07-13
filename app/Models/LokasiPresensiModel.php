@@ -49,8 +49,8 @@ class LokasiPresensiModel extends Model
 
             if ($filter_keyword) {
                 $this->builder->groupStart()
-                    ->like('nama_lokasi', $filter_keyword)
-                    ->orLike('alamat_lokasi', $filter_keyword)
+                    ->ilike('nama_lokasi', $filter_keyword)
+                    ->orIlike('alamat_lokasi', $filter_keyword)
                     ->groupEnd();
             }
         }
