@@ -23,10 +23,8 @@ class AuthGroupsUsersSeeder extends Seeder
             ],
         ];
 
-        // Simple Queries
-        // $this->db->query('INSERT INTO auth_groups_users (group_id, user_id) VALUES(:group_id:, :user_id:)', $data);
-
-        // Using Query Builder
-        $this->db->table('auth_groups_users')->insertBatch($data);
+        foreach ($data as $row) {
+            $this->db->table('auth_groups_users')->insert($row);
+        }
     }
 }

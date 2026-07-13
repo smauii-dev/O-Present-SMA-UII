@@ -32,10 +32,8 @@ class UsersSeeder extends Seeder
             ],
         ];
 
-        // Simple Queries
-        // $this->db->query('INSERT INTO users (id_pegawai, email, username, password_hash, active) VALUES(:id_pegawai:, :email:, :username:, :password_hash:, :active:', $data);
-
-        // Using Query Builder
-        $this->db->table('users')->insertBatch($data);
+        foreach ($data as $row) {
+            $this->db->table('users')->insert($row);
+        }
     }
 }
