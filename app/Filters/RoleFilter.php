@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Myth\Auth\Exceptions\PermissionException;
+use Myth\Auth\Filters\BaseFilter;
 
 class RoleFilter extends BaseFilter implements FilterInterface
 {

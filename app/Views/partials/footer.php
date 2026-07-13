@@ -10,7 +10,7 @@
                 <ul class="list-inline list-inline-dots mb-0">
                     <li class="list-inline-item">
                         Copyright &copy; <?= date('Y') ?>
-                        <a href="https://josephines1.github.io/" target="_blank" class="link-secondary">Josephine</a>.
+                        <a href="https://smauiiyk.sch.id/" target="_blank" class="link-secondary">Ahmad Hanif, SMA UII Yogyakarta</a>.
                     </li>
                 </ul>
             </div>

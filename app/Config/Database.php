@@ -26,10 +26,10 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-'hostname'     => 'ep-snowy-dawn-atm5m66c.c-9.us-east-1.aws.neon.tech',
-        'username'     => 'neondb_owner',
-        'password'     => 'NEONDB_PASSWORD_ROTATED',
-        'database'     => 'neondb',
+'hostname'     => env('database.default.hostname', 'ep-snowy-dawn-atm5m66c.c-9.us-east-1.aws.neon.tech'),
+        'username'     => env('database.default.username', 'neondb_owner'),
+        'password'     => env('database.default.password', 'NEONDB_PASSWORD_ROTATED'),
+        'database'     => env('database.default.database', 'neondb'),
         'DBDriver'     => 'Postgre',
         'DBPrefix'     => '',
         'pConnect'     => false,
@@ -37,7 +37,7 @@ class Database extends Config
         'charset'      => 'utf8',
         'DBCollat'     => '',
         'swapPre'      => '',
-        'encrypt'      => false,
+        'encrypt'      => true,
         'compress'     => false,
         'strictOn'     => false,
         'failover'     => [],
