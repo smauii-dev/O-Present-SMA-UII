@@ -13,6 +13,7 @@ services:
       - nginx-net
     restart: always
     volumes:
+      - .:/var/www/html
       - opresent_uploads:/var/www/html/writable/uploads
       - opresent_photos_masuk:/var/www/html/public/assets/img/foto_presensi/masuk
       - opresent_photos_keluar:/var/www/html/public/assets/img/foto_presensi/keluar
