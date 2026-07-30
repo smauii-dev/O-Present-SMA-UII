@@ -8,43 +8,75 @@ class PegawaiSeeder extends Seeder
 {
     public function run()
     {
+        // Resolve FKs by slug — never hardcode IDs (dev/prod drift)
+        $lokasi = $this->db->table('lokasi_presensi')->where('slug', 'sma-uii-yogyakarta')->get()->getRow();
+        if (! $lokasi) {
+            $this->call('LokasiSeeder');
+            $lokasi = $this->db->table('lokasi_presensi')->where('slug', 'sma-uii-yogyakarta')->get()->getRow();
+        }
+        if (! $lokasi) {
+            echo "PegawaiSeeder: lokasi sma-uii-yogyakarta missing\n";
+
+            return;
+        }
+        $lokasiId = (int) $lokasi->id;
+
+        $jabatanBySlug = static function ($db, string $slug, string $label) {
+            $row = $db->table('jabatan')->where('slug', $slug)->get()->getRow();
+            if ($row) {
+                return (int) $row->id;
+            }
+            $db->table('jabatan')->insert(['jabatan' => $label, 'slug' => $slug]);
+
+            return (int) $db->insertID();
+        };
+
         $data = [
             [
-                'nip'                   => 'PEG-0001',
-                'id_jabatan'            => '1',
-                'id_lokasi_presensi'    => '1',
-                'nama'                  => 'Jaya Wahyudi Putra',
-                'jenis_kelamin'         => 'Laki-laki',
-                'alamat'                => 'Jl. Harsono RM No.1, Ragunan, Ps. Minggu, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12550',
-                'no_handphone'          => '081234567891',
-                'foto'                  => 'default.jpg',
+                'nip'                => 'PEG-0001',
+                'id_jabatan'         => $jabatanBySlug($this->db, 'chief-executive-officer', 'Chief Executive Officer'),
+                'id_lokasi_presensi' => $lokasiId,
+                'nama'               => 'Jaya Wahyudi Putra',
+                'jenis_kelamin'      => 'Laki-laki',
+                'alamat'             => 'Yogyakarta',
+                'no_handphone'       => '081234567891',
+                'foto'               => 'default.jpg',
             ],
             [
-                'nip'                   => 'PEG-0002',
-                'id_jabatan'            => '2',
-                'id_lokasi_presensi'    => '1',
-                'nama'                  => 'Tamani Indah Permata',
-                'jenis_kelamin'         => 'Perempuan',
-                'alamat'                => 'Jl. Lodan Timur No.7, Ancol, Kec. Pademangan, Jkt Utara, Daerah Khusus Ibukota Jakarta 14430',
-                'no_handphone'          => '081281010191',
-                'foto'                  => 'default.jpg',
+                'nip'                => 'PEG-0002',
+                'id_jabatan'         => $jabatanBySlug($this->db, 'sales-lead', 'Sales Lead'),
+                'id_lokasi_presensi' => $lokasiId,
+                'nama'               => 'Tamani Indah Permata',
+                'jenis_kelamin'      => 'Perempuan',
+                'alamat'             => 'Yogyakarta',
+                'no_handphone'       => '081281010191',
+                'foto'               => 'default.jpg',
             ],
             [
-                'nip'                   => 'PEG-0003',
-                'id_jabatan'            => '3',
-                'id_lokasi_presensi'    => '1',
-                'nama'                  => 'Christoper Holand',
-                'jenis_kelamin'         => 'Laki-laki',
-                'alamat'                => 'Jl. Taman Suropati No.5, RT.5/RW.5, Menteng, Kec. Menteng, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10310',
-                'no_handphone'          => '081287761290',
-                'foto'                  => 'default.jpg',
+                'nip'                => 'PEG-0003',
+                'id_jabatan'         => $jabatanBySlug($this->db, 'siswa', 'Siswa'),
+                'id_lokasi_presensi' => $lokasiId,
+                'nama'               => 'Ahmad Hanif',
+                'jenis_kelamin'      => 'Laki-laki',
+                'alamat'             => 'Yogyakarta',
+                'no_handphone'       => '081287761290',
+                'foto'               => 'default.jpg',
             ],
         ];
 
-        // Simple Queries
-        // $this->db->query('INSERT INTO pegawai (nip, id_jabatan, id_lokasi_presensi, nama, jenis_kelamin, alamat, no_handphone, foto) VALUES(:nip:, :id_jabatan:, :id_lokasi_presensi:, :nama:, :jenis_kelamin:, :alamat:, :no_handphone:, :foto:)', $data);
+        foreach ($data as $pegawai) {
+            $existing = $this->db->table('pegawai')->where('nip', $pegawai['nip'])->get()->getRow();
+            if ($existing) {
+                $this->db->table('pegawai')->where('id', $existing->id)->update([
+                    'id_lokasi_presensi' => $lokasiId,
+                    'id_jabatan'         => $pegawai['id_jabatan'],
+                ]);
+                echo "Updated NIP {$pegawai['nip']} → lokasi SMA UII\n";
+                continue;
+            }
 
-        // Using Query Builder
-        $this->db->table('pegawai')->insertBatch($data);
+            $this->db->table('pegawai')->insert($pegawai);
+            echo "Created pegawai: {$pegawai['nip']} - {$pegawai['nama']}\n";
+        }
     }
 }

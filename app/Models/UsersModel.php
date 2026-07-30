@@ -8,7 +8,7 @@ class UsersModel extends Model
 {
     protected $table = 'users';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['id_pegawai', 'email', 'username', 'password_hash', 'active', 'activate_hash'];
+    protected $allowedFields = ['id_pegawai', 'email', 'username', 'password_hash', 'active', 'activate_hash', 'force_pass_reset'];
     protected $useTimestamps = true;
 
     public function getUserInfo($userId)
@@ -50,6 +50,6 @@ class UsersModel extends Model
 
     public function hashPassword($password_string)
     {
-        return password_hash(base64_encode(hash('sha384', $password_string, true)), PASSWORD_DEFAULT);
+        return \Myth\Auth\Password::hash($password_string);
     }
 }

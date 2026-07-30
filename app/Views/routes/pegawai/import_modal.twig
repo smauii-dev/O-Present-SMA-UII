@@ -1,0 +1,121 @@
+{% import 'partials/form_modal.twig' as fm %}
+
+{{ fm.formModal('pegawai-import', 'Import Pegawai', 'md', '/api/pegawai/import', null, enctype='multipart/form-data', method='POST') }}
+  <div 
+    x-data="{
+      fileName: '',
+      fileSize: '',
+      isDragOver: false,
+      loading: false,
+      handleFileChange(e) {
+        const file = e.target.files[0];
+        if (file) {
+          this.fileName = file.name;
+          this.fileSize = this.formatBytes(file.size);
+        } else {
+          this.fileName = '';
+          this.fileSize = '';
+        }
+      },
+      handleDrop(e) {
+        const files = e.dataTransfer.files;
+        if (files && files.length > 0) {
+          this.$refs.fileInput.files = files;
+          const changeEvent = new Event('change', { bubbles: true });
+          this.$refs.fileInput.dispatchEvent(changeEvent);
+        }
+      },
+      formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+      }
+    }"
+    @submit="loading = true"
+    @htmx:after-request="loading = false"
+    class="space-y-5"
+  >
+    {# Info Box / Guideline #}
+    <div class="rounded-2xl bg-primary-50/70 p-4 border border-primary-100/50 flex items-start gap-3.5">
+      <div class="text-primary-600 shrink-0 mt-0.5">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div class="space-y-1">
+        <h4 class="text-xs font-bold text-primary-900 tracking-wide uppercase">Panduan Format Data</h4>
+        <p class="text-xs text-primary-800 leading-relaxed">
+          Gunakan template Excel yang disediakan di bawah ini agar format kolom data pegawai terbaca dengan tepat oleh sistem.
+        </p>
+      </div>
+    </div>
+
+    {# Interactive File Upload Zone #}
+    <div 
+      class="relative rounded-2xl border-2 border-dashed p-7 transition-all duration-300 flex flex-col items-center justify-center text-center cursor-pointer select-none"
+      :class="isDragOver ? 'border-primary-500 bg-primary-50/40 ring-4 ring-primary-500/10' : (fileName ? 'border-success-500 bg-success-50/10' : 'border-gray-200 hover:border-primary-400 bg-gray-50/50')"
+      @dragover.prevent="isDragOver = true"
+      @dragleave.prevent="isDragOver = false"
+      @drop.prevent="isDragOver = false; handleDrop($event)"
+      @click="$refs.fileInput.click()"
+    >
+      <input 
+        x-ref="fileInput" 
+        type="file" 
+        name="file_excel" 
+        accept=".xlsx,.xls" 
+        class="hidden" 
+        @change="handleFileChange($event)"
+      >
+
+      <!-- Dynamic Icon based on File Selection state -->
+      <div class="mb-3.5 rounded-2xl p-3 transition-transform duration-300" 
+           :class="fileName ? 'bg-success-100/80 text-success-600' : 'bg-gray-100 text-gray-400 group-hover:scale-105'">
+        <!-- Excel upload icon -->
+        <svg x-show="!fileName" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+        </svg>
+        <!-- Success checkmark icon -->
+        <svg x-show="fileName" x-cloak class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+      </div>
+
+      <!-- Helper texts -->
+      <div x-show="!fileName" class="space-y-1">
+        <span class="text-sm font-semibold text-gray-700">Pilih file Excel</span>
+        <p class="text-xs text-gray-400">atau seret dan letakkan file di sini (.xlsx, .xls)</p>
+      </div>
+
+      <div x-show="fileName" x-cloak class="space-y-1">
+        <span class="text-sm font-bold text-success-800 truncate max-w-xs block" x-text="fileName"></span>
+        <p class="text-xs text-success-600 font-medium" x-text="fileSize"></p>
+      </div>
+    </div>
+
+    {# Footer Actions #}
+    <div class="modal-actions mt-6 pt-4 border-t border-gray-100 flex justify-between items-center">
+      <div>
+        <a href="/api/pegawai/template" class="btn btn-export btn-sm">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Unduh Template
+        </a>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" @click="$dispatch('close-modal')" class="btn btn-secondary btn-sm">Batal</button>
+        <button type="submit" class="btn btn-primary btn-sm" :disabled="!fileName || loading">
+          <svg x-show="loading" x-cloak class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+          </svg>
+          <span x-text="loading ? 'Mengimpor...' : 'Import Data'">Import Data</span>
+        </button>
+      </div>
+    </div>
+  </div>
+{{ fm.end() }}

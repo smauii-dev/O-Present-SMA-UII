@@ -4,7 +4,7 @@ namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Session\Handlers\BaseHandler;
-use CodeIgniter\Session\Handlers\DatabaseHandler;
+use CodeIgniter\Session\Handlers\FileHandler;
 
 class Session extends BaseConfig
 {
@@ -15,13 +15,13 @@ class Session extends BaseConfig
      *
      * The session storage driver to use:
      * - `CodeIgniter\Session\Handlers\FileHandler`
-     * - `CodeIgniter\Session\Handlers\DatabaseHandler`
+     * - `CodeIgniter\Session\Handlers\FileHandler`
      * - `CodeIgniter\Session\Handlers\MemcachedHandler`
      * - `CodeIgniter\Session\Handlers\RedisHandler`
      *
      * @var class-string<BaseHandler>
      */
-    public string $driver = DatabaseHandler::class;
+    public string $driver = \CodeIgniter\Session\Handlers\FileHandler::class;
 
     /**
      * --------------------------------------------------------------------------
@@ -57,7 +57,7 @@ class Session extends BaseConfig
      *
      * IMPORTANT: You are REQUIRED to set a valid save path!
      */
-    public string $savePath = WRITEPATH . 'session';
+    public string $savePath = '/var/www/html/writable/session';
 
     /**
      * --------------------------------------------------------------------------
@@ -77,8 +77,10 @@ class Session extends BaseConfig
      * --------------------------------------------------------------------------
      *
      * How many seconds between CI regenerating the session ID.
+     * Set to 0 to disable automatic session ID regeneration (needed when
+     * frontend proxies API calls and can't forward Set-Cookie headers).
      */
-    public int $timeToUpdate = 300;
+    public int $timeToUpdate = 0;
 
     /**
      * --------------------------------------------------------------------------
@@ -99,4 +101,8 @@ class Session extends BaseConfig
      * DB Group for the database session.
      */
     public ?string $DBGroup = null;
+
+    public int $lockRetryInterval = 100_000;
+
+    public int $lockMaxRetries = 300;
 }

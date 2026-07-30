@@ -1,0 +1,115 @@
+{% extends 'layouts/base.twig' %}
+
+{% block head %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1e3a5f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  [x-cloak] { display: none !important; }
+  html, body.auth-page {
+    height: 100%;
+    margin: 0;
+    background: #152a4a;
+    overflow: hidden;
+  }
+  body.auth-page #toast-container { display: none !important; }
+</style>
+{% endblock %}
+
+{% block body_class %}auth-page{% endblock %}
+{% block flash_toasts %}{% endblock %}
+
+{% block body %}
+<div class="auth-split">
+
+  {# ═══════════ PANEL 1 — Brand ═══════════ #}
+  <aside class="auth-brand" aria-label="O-Present">
+    <div class="auth-brand-glow" aria-hidden="true"></div>
+
+    <div class="auth-brand-main">
+      {# Mobile: horizontal strip · Desktop: stacked block #}
+      <div class="auth-brand-lockup">
+        <div class="auth-logo">
+          <img src="/assets/logo.png" alt="Logo SMA UII" width="72" height="72" decoding="async">
+        </div>
+        <div class="auth-brand-text">
+          <p class="auth-brand-kicker">SMA UII Yogyakarta</p>
+          <h1 class="auth-brand-title">O-Present</h1>
+          <p class="auth-brand-desc hidden md:block">
+            Sistem presensi digital — cepat, aman, dan real-time.
+          </p>
+        </div>
+      </div>
+
+      <ul class="hidden md:flex flex-col gap-3 list-none m-0 p-0" aria-label="Keunggulan">
+        <li class="flex items-center gap-3.5">
+          <span class="flex items-center justify-center shrink-0 w-10 h-10 rounded-xl bg-white/10 border border-white/15 text-white" aria-hidden="true">
+            <svg class="w-5 h-5 shrink-0 block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </span>
+          <div>
+            <strong class="block text-[0.8125rem] font-bold tracking-tight">Live attendance</strong>
+            <span class="block mt-0.25 text-xs text-white/65 leading-snug">Clock-in real-time di lokasi</span>
+          </div>
+        </li>
+        <li class="flex items-center gap-3.5">
+          <span class="flex items-center justify-center shrink-0 w-10 h-10 rounded-xl bg-white/10 border border-white/15 text-white" aria-hidden="true">
+            <svg class="w-5 h-5 shrink-0 block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+          </span>
+          <div>
+            <strong class="block text-[0.8125rem] font-bold tracking-tight">GPS · Secure</strong>
+            <span class="block mt-0.25 text-xs text-white/65 leading-snug">Lokasi terverifikasi & aman</span>
+          </div>
+        </li>
+        <li class="flex items-center gap-3.5">
+          <span class="flex items-center justify-center shrink-0 w-10 h-10 rounded-xl bg-white/10 border border-white/15 text-white" aria-hidden="true">
+            <svg class="w-5 h-5 shrink-0 block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+          </span>
+          <div>
+            <strong class="block text-[0.8125rem] font-bold tracking-tight">Mobile-first</strong>
+            <span class="block mt-0.25 text-xs text-white/65 leading-snug">Nyaman di HP & desktop</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <p class="auth-brand-copy">&copy; {{ 'now'|date('Y') }} SMA UII Yogyakarta</p>
+  </aside>
+
+  {# ═══════════ PANEL 2 — Form ═══════════ #}
+  <main class="auth-stage" role="main">
+    <div class="auth-card">
+      {% if flashError %}
+      <div class="auth-alert auth-alert--error" role="alert">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+        <span>{{ flashError }}</span>
+      </div>
+      {% endif %}
+      {% if flashSuccess %}
+      <div class="auth-alert auth-alert--success" role="status">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span>{{ flashSuccess }}</span>
+      </div>
+      {% endif %}
+      {% if flashInfo %}
+      <div class="auth-alert auth-alert--info" role="status">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
+        <span>{{ flashInfo }}</span>
+      </div>
+      {% endif %}
+      {% if flashWarning %}
+      <div class="auth-alert auth-alert--warning" role="alert">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+        <span>{{ flashWarning }}</span>
+      </div>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+{% endblock %}

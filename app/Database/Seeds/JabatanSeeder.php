@@ -21,13 +21,21 @@ class JabatanSeeder extends Seeder
                 'jabatan' => 'Siswa',
                 'slug'    => 'siswa',
             ],
+            [
+                'jabatan' => 'Administrator',
+                'slug'    => 'administrator',
+            ],
         ];
 
-        // Simple Queries
-        // $this->db->query('INSERT INTO jabatan (jabatan, slug) VALUES(:jabatan:, :slug:)', $data);
-
-        // Using Query Builder
-        // $this->db->table('jabatan')->insert($data);
-        $this->db->table('jabatan')->insertBatch($data);
+        foreach ($data as $row) {
+            $exists = $this->db->table('jabatan')->where('slug', $row['slug'])->get()->getRow();
+            if ($exists) {
+                $this->db->table('jabatan')->where('id', $exists->id)->update([
+                    'jabatan' => $row['jabatan'],
+                ]);
+            } else {
+                $this->db->table('jabatan')->insert($row);
+            }
+        }
     }
 }

@@ -1,0 +1,57 @@
+{% extends 'layouts/base.twig' %}
+
+{% block head %}
+<style>
+  [x-cloak] { display: none !important; }
+  @media (max-width: 1023px) {
+    /* Floating centered pill nav + safe area */
+    .mobile-content-pad { padding-bottom: 7.5rem !important; }
+  }
+</style>
+{# CSRF + HTMX config di resources/ts/main.ts #}
+{% endblock %}
+
+{% block body %}
+{#
+  Struktur layout (penting untuk fixed nav di tengah viewport):
+
+  body
+  └─ #app-shell (x-data sidebar)
+       ├─ overlay sidebar
+       ├─ aside sidebar (fixed left)
+       ├─ .app-main (lg:ml-64)  ← header + content saja
+       │    ├─ header
+       │    └─ main
+       └─ mobile-nav (fixed, sibling — BUKAN di dalam .app-main)
+            agar left/right mengacu ke viewport, pill mx-auto benar-benar center
+#}
+<div id="app-shell" class="min-h-dvh bg-gray-50" x-data="{ sidebarOpen: false }">
+
+  {# Sidebar overlay (mobile) #}
+  <div x-show="sidebarOpen" x-cloak
+       x-transition:enter="transition-opacity duration-200"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       x-transition:leave="transition-opacity duration-200"
+       x-transition:leave-start="opacity-100"
+       x-transition:leave-end="opacity-0"
+       @click="sidebarOpen = false"
+       class="fixed inset-0 z-40 bg-black/50 lg:hidden"
+       aria-hidden="true">
+  </div>
+
+  {% include 'partials/sidebar.twig' %}
+
+  {# Kolom konten — tanpa mobile nav di dalamnya #}
+  <div class="app-main relative flex min-h-dvh flex-col lg:ml-64">
+    {% include 'partials/header.twig' %}
+
+    <main class="mobile-content-pad flex-1 p-4 sm:p-6 lg:pb-6">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  {# Mobile nav: direct child of #app-shell → fixed ke viewport, center horizontal #}
+  {% include 'partials/mobile_nav.twig' %}
+</div>
+{% endblock %}

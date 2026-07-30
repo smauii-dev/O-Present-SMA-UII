@@ -1,0 +1,113 @@
+{% extends 'layouts/auth.twig' %}
+
+{% block content %}
+<a href="/login" class="auth-back">
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/>
+  </svg>
+  Kembali
+</a>
+
+<header class="auth-card-head">
+  <h2 class="auth-card-title">Password baru</h2>
+  <p class="auth-card-sub">Minimal 8 karakter. Jangan bagikan ke siapa pun.</p>
+</header>
+
+<form method="POST"
+      action="/reset-password"
+      class="auth-form"
+      x-data="Object.assign({
+        loading: false,
+        show: false,
+        pass: '',
+        conf: '',
+        strength() {
+          const p = this.pass || '';
+          let s = 0;
+          if (p.length >= 8) s++;
+          if (/[A-Z]/.test(p) && /[a-z]/.test(p)) s++;
+          if (/\d/.test(p)) s++;
+          if (/[^A-Za-z0-9]/.test(p)) s++;
+          return s;
+        },
+        strengthLabel() {
+          return ['', 'Lemah', 'Cukup', 'Baik', 'Kuat'][this.strength()] || '';
+        },
+        matched() { return this.pass.length > 0 && this.conf.length > 0 && this.pass === this.conf; },
+        mismatched() { return this.pass.length > 0 && this.conf.length > 0 && this.pass !== this.conf; }
+      }, window.AlpineValidationMixin(schemas.resetPassword))"
+      @submit="loading = true"
+      novalidate>
+
+  {{ csrf_field()|raw }}
+  <input type="hidden" name="token" value="{{ token }}">
+  <input type="hidden" name="email" value="{{ email }}">
+
+  <div class="auth-field">
+    <label for="password">Password baru</label>
+    <div class="auth-input-wrap">
+      <span class="auth-input-icon" aria-hidden="true">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+        </svg>
+      </span>
+      <input :type="show ? 'text' : 'password'" id="password" name="password" required minlength="8"
+             autocomplete="new-password" enterkeyhint="next" x-model="pass"
+             placeholder="Minimal 8 karakter"
+             class="auth-input auth-input--action"
+             :class="{ 'is-invalid': hasError('password') }"
+             @blur="validateField('password', $el.value)">
+      <button type="button" class="auth-eye" @click="show = !show"
+              :aria-label="show ? 'Sembunyikan password' : 'Tampilkan password'">
+        <svg x-show="!show" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <svg x-cloak x-show="show" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"/>
+        </svg>
+      </button>
+    </div>
+    <div class="auth-strength" x-show="pass.length > 0" x-cloak :data-level="strength()" role="meter"
+         :aria-valuenow="strength()" aria-valuemin="0" aria-valuemax="4">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <p class="auth-hint" x-show="pass.length > 0" x-cloak x-text="'Kekuatan: ' + strengthLabel()"></p>
+    <template x-if="hasError('password')">
+      <p class="auth-error" role="alert" x-text="getError('password')"></p>
+    </template>
+  </div>
+
+  <div class="auth-field">
+    <label for="password_confirm">Konfirmasi</label>
+    <div class="auth-input-wrap">
+      <span class="auth-input-icon" aria-hidden="true">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </span>
+      <input :type="show ? 'text' : 'password'" id="password_confirm" name="password_confirm"
+             required minlength="8" autocomplete="new-password" enterkeyhint="done" x-model="conf"
+             placeholder="Ulangi password"
+             class="auth-input"
+             :class="{ 'is-invalid': mismatched() || hasError('password_confirm') }"
+             @blur="validateField('password_confirm', $el.value)">
+    </div>
+    <p class="auth-match ok" x-cloak x-show="matched()">Password cocok</p>
+    <p class="auth-match bad" x-cloak x-show="mismatched()" role="alert">Password tidak cocok</p>
+    <template x-if="hasError('password_confirm')">
+      <p class="auth-error" role="alert" x-text="getError('password_confirm')"></p>
+    </template>
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-block auth-submit"
+          :disabled="loading || mismatched() || pass.length < 8"
+          :aria-busy="loading.toString()">
+    <svg x-cloak x-show="loading" class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+    </svg>
+    <span x-text="loading ? 'Menyimpan…' : 'Simpan password'">Simpan password</span>
+  </button>
+</form>
+{% endblock %}

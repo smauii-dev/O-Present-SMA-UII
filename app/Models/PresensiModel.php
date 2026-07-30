@@ -6,45 +6,43 @@ use CodeIgniter\Model;
 
 class PresensiModel extends Model
 {
-    protected $db, $builder;
     protected $table = 'presensi';
     protected $primaryKey = 'id';
     protected $allowedFields = ['id_pegawai', 'tanggal_masuk', 'jam_masuk', 'foto_masuk', 'tanggal_keluar', 'jam_keluar', 'foto_keluar'];
     protected $useTimestamps = true;
-
-    public function __construct()
-    {
-        $this->db = \Config\Database::connect();
-        $this->builder = $this->db->table('presensi');
-    }
 
     public function getDataPresensi($id_pegawai, $tanggal_dari = false, $tanggal_sampai = false, $print = false, $perPage = 10)
     {
         $pager = service('pager');
         $pager->setPath('rekap-presensi', 'rekap');
 
-        $page = (@$_GET['page_rekap']) ? $_GET['page_rekap'] : 1;
+        $request = service('request');
+        $page = (int) ($request->getGet('page_rekap') ?? 1);
         $offset = ($page - 1) * $perPage;
 
-        $this->builder->select('presensi.*, pegawai.nip, pegawai.nama, pegawai.alamat, pegawai.id_lokasi_presensi, lokasi_presensi.nama_lokasi as lokasi_presensi, lokasi_presensi.jam_masuk as jam_masuk_kantor');
-        $this->builder->join('pegawai', 'pegawai.id = presensi.id_pegawai');
-        $this->builder->join('lokasi_presensi', 'lokasi_presensi.id = pegawai.id_lokasi_presensi');
-        $this->builder->where('presensi.id_pegawai', $id_pegawai);
-        $this->builder->orderBy('presensi.tanggal_masuk', 'DESC');
+        $builder = $this->db->table('presensi');
+        $builder->select('presensi.*, pegawai.nip, pegawai.nama, pegawai.alamat, pegawai.id_lokasi_presensi, lokasi_presensi.nama_lokasi as lokasi_presensi, lokasi_presensi.jam_masuk as jam_masuk_kantor');
+        $builder->join('pegawai', 'pegawai.id = presensi.id_pegawai');
+        $builder->join('lokasi_presensi', 'lokasi_presensi.id = pegawai.id_lokasi_presensi');
+        $builder->where('presensi.id_pegawai', $id_pegawai);
+        $builder->orderBy('presensi.tanggal_masuk', 'DESC');
 
-        $total = 0;
-
-        if ($tanggal_dari || $tanggal_sampai) {
-            $this->builder->where('tanggal_masuk BETWEEN ' . "'" . $tanggal_dari . "'" . ' AND ' . "'" . $tanggal_sampai . "'");
+        if ($tanggal_dari && $tanggal_sampai) {
+            $builder->where('tanggal_masuk >=', $tanggal_dari);
+            $builder->where('tanggal_masuk <=', $tanggal_sampai);
+        } elseif ($tanggal_dari) {
+            $builder->where('tanggal_masuk >=', $tanggal_dari);
+        } elseif ($tanggal_sampai) {
+            $builder->where('tanggal_masuk <=', $tanggal_sampai);
         }
 
-        $countQuery = clone $this->builder;
+        $countQuery = clone $builder;
         $total = $countQuery->countAllResults();
 
         if ($print) {
-            $result = $this->builder->get()->getResult();
+            $result = $builder->get()->getResult();
         } else {
-            $result = $this->builder->get($perPage, $offset)->getResult();
+            $result = $builder->get($perPage, $offset)->getResult();
         }
 
         return [
@@ -75,31 +73,34 @@ class PresensiModel extends Model
         $pager = service('pager');
         $pager->setPath('laporan-presensi-harian', 'harian');
 
-        $page = (@$_GET['page_harian']) ? $_GET['page_harian'] : 1;
+        $request = service('request');
+        $page = (int) ($request->getGet('page_harian') ?? 1);
         $offset = ($page - 1) * $perPage;
 
-        $this->builder = $this->db->table('presensi');
-        $this->builder->select('presensi.*, pegawai.nip, pegawai.nama, pegawai.alamat, pegawai.id_lokasi_presensi, lokasi_presensi.nama_lokasi as lokasi_presensi, lokasi_presensi.jam_masuk as jam_masuk_kantor');
-        $this->builder->join('pegawai', 'pegawai.id = presensi.id_pegawai');
-        $this->builder->join('lokasi_presensi', 'lokasi_presensi.id = pegawai.id_lokasi_presensi');
-        $this->builder->orderBy('tanggal_masuk', 'DESC');
+        $builder = $this->db->table('presensi');
+        $builder->select('presensi.*, pegawai.nip, pegawai.nama, pegawai.alamat, pegawai.id_lokasi_presensi, lokasi_presensi.nama_lokasi as lokasi_presensi, lokasi_presensi.jam_masuk as jam_masuk_kantor');
+        $builder->join('pegawai', 'pegawai.id = presensi.id_pegawai');
+        $builder->join('lokasi_presensi', 'lokasi_presensi.id = pegawai.id_lokasi_presensi');
+        $builder->orderBy('tanggal_masuk', 'DESC');
 
-        $total = 0;
-        $tanggal_sekarang = date('Y-m-d');
-
-        if ($tanggal_dari || $tanggal_sampai) {
-            $this->builder->where('presensi.tanggal_masuk BETWEEN ' . "'" . $tanggal_dari . "'" . ' AND ' . "'" . $tanggal_sampai . "'");
+        if ($tanggal_dari && $tanggal_sampai) {
+            $builder->where('presensi.tanggal_masuk >=', $tanggal_dari);
+            $builder->where('presensi.tanggal_masuk <=', $tanggal_sampai);
+        } elseif ($tanggal_dari) {
+            $builder->where('presensi.tanggal_masuk >=', $tanggal_dari);
+        } elseif ($tanggal_sampai) {
+            $builder->where('presensi.tanggal_masuk <=', $tanggal_sampai);
         } else {
-            $this->builder->where('presensi.tanggal_masuk = ' . "'" . $tanggal_sekarang . "'");
+            $builder->where('presensi.tanggal_masuk', date('Y-m-d'));
         }
 
-        $countQuery = clone $this->builder;
+        $countQuery = clone $builder;
         $total = $countQuery->countAllResults();
 
         if ($print) {
-            $result = $this->builder->get()->getResult();
+            $result = $builder->get()->getResult();
         } else {
-            $result = $this->builder->get($perPage, $offset)->getResult();
+            $result = $builder->get($perPage, $offset)->getResult();
         }
 
         return [
@@ -116,32 +117,30 @@ class PresensiModel extends Model
         $pager = service('pager');
         $pager->setPath('laporan-presensi-bulanan', 'bulanan');
 
-        $page = (@$_GET['page_bulanan']) ? $_GET['page_bulanan'] : 1;
+        $request = service('request');
+        $page = (int) ($request->getGet('page_bulanan') ?? 1);
         $offset = ($page - 1) * $perPage;
 
-        $this->builder = $this->db->table('presensi');
-        $this->builder->select('presensi.*, pegawai.nip, pegawai.nama, pegawai.alamat, pegawai.id_lokasi_presensi, lokasi_presensi.nama_lokasi as lokasi_presensi, lokasi_presensi.jam_masuk as jam_masuk_kantor');
-        $this->builder->join('pegawai', 'pegawai.id = presensi.id_pegawai');
-        $this->builder->join('lokasi_presensi', 'lokasi_presensi.id = pegawai.id_lokasi_presensi');
-        $this->builder->orderBy('tanggal_masuk', 'DESC');
+        $builder = $this->db->table('presensi');
+        $builder->select('presensi.*, pegawai.nip, pegawai.nama, pegawai.alamat, pegawai.id_lokasi_presensi, lokasi_presensi.nama_lokasi as lokasi_presensi, lokasi_presensi.jam_masuk as jam_masuk_kantor');
+        $builder->join('pegawai', 'pegawai.id = presensi.id_pegawai');
+        $builder->join('lokasi_presensi', 'lokasi_presensi.id = pegawai.id_lokasi_presensi');
+        $builder->orderBy('tanggal_masuk', 'DESC');
 
-        $total = 0;
-        $bulan_sekarang = date('Y-m');
-
-        if ($filter_bulan || $filter_tahun) {
+        if ($filter_bulan && $filter_tahun) {
             $bulan_filter = $filter_tahun . '-' . $filter_bulan;
-            $this->builder->where("TO_CHAR(presensi.tanggal_masuk, 'YYYY-MM') = '" . $bulan_filter . "'");
+            $builder->where("TO_CHAR(presensi.tanggal_masuk, 'YYYY-MM')", $bulan_filter);
         } else {
-            $this->builder->where("TO_CHAR(presensi.tanggal_masuk, 'YYYY-MM') = '" . $bulan_sekarang . "'");
+            $builder->where("TO_CHAR(presensi.tanggal_masuk, 'YYYY-MM')", date('Y-m'));
         }
 
-        $countQuery = clone $this->builder;
+        $countQuery = clone $builder;
         $total = $countQuery->countAllResults();
 
         if ($print) {
-            $result = $this->builder->get()->getResult();
+            $result = $builder->get()->getResult();
         } else {
-            $result = $this->builder->get($perPage, $offset)->getResult();
+            $result = $builder->get($perPage, $offset)->getResult();
         }
 
         return [
@@ -156,12 +155,9 @@ class PresensiModel extends Model
     public function getMinYear()
     {
         $builder = $this->db->table('presensi');
-        $builder->selectMin('EXTRACT(YEAR FROM tanggal_masuk)', 'min_year');
-        $query = $builder->get();
-
-        $result = $query->getRow();
-
-        return $result ? $result->min_year : null;
+        $builder->selectMin('tanggal_masuk', 'min_date');
+        $result = $builder->get()->getRow();
+        return $result ? date('Y', strtotime($result->min_date)) : null;
     }
 
     public function getMinDate($id_pegawai = false)
@@ -173,9 +169,7 @@ class PresensiModel extends Model
         }
 
         $builder->selectMin('tanggal_masuk', 'min_date');
-        $query = $builder->get();
-
-        $result = $query->getRow();
+        $result = $builder->get()->getRow();
 
         return $result ? $result->min_date : null;
     }
@@ -183,8 +177,7 @@ class PresensiModel extends Model
     public function getDataPresensiHariIni()
     {
         $builder = $this->db->table('presensi');
-        $builder->select('presensi.*');
-        $query = $builder->where('tanggal_masuk', date('Y-m-d'))->get();
-        return $query->getNumRows();
+        $builder->where('tanggal_masuk', date('Y-m-d'));
+        return $builder->countAllResults();
     }
 }

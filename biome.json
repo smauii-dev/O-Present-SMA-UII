@@ -1,0 +1,77 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.5/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "includes": [
+      "resources/**/*.ts",
+      "resources/**/*.js",
+      "resources/**/*.tsx",
+      "resources/**/*.jsx",
+      "vite.config.ts",
+      "*.config.ts",
+      "!resources/**/*.d.ts",
+      "!node_modules",
+      "!public/build",
+      "!vendor"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "lineEnding": "lf"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "suspicious": {
+        "noExplicitAny": "error",
+        "noAssignInExpressions": "error",
+        "noConfusingVoidType": "error"
+      },
+      "style": {
+        "noNonNullAssertion": "warn",
+        "useConst": "error",
+        "useTemplate": "error",
+        "noParameterAssign": "error",
+        "noUnusedTemplateLiteral": "error"
+      },
+      "complexity": {
+        "noBannedTypes": "error",
+        "noUselessTypeConstraint": "error"
+      },
+      "correctness": {
+        "noUnusedVariables": "error",
+        "useHookAtTopLevel": "off"
+      },
+      "a11y": {
+        "useKeyWithClickEvents": "warn",
+        "useSemanticElements": "off",
+        "noSvgWithoutTitle": "off"
+      },
+      "performance": {
+        "noDelete": "warn"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "trailingCommas": "all",
+      "semicolons": "always"
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  }
+}

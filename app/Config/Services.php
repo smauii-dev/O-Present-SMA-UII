@@ -29,4 +29,12 @@ class Services extends BaseService
      *     return new \CodeIgniter\Example();
      * }
      */
+    public static function s3($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('s3');
+        }
+
+        return new \App\Services\S3Service();
+    }
 }

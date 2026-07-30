@@ -6,52 +6,41 @@ use CodeIgniter\Model;
 
 class JabatanModel extends Model
 {
-    protected $db, $builder;
     protected $table = 'jabatan';
     protected $primaryKey = 'id';
     protected $allowedFields = ['jabatan', 'slug'];
     protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-
-    public function __construct()
-    {
-        $this->db = \Config\Database::connect();
-        $this->builder = $this->db->table('jabatan');
-    }
+    protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
 
     public function getJabatan($slug = false, $keyword = false, $perPage = 10)
     {
         $pager = service('pager');
         $pager->setPath('jabatan', 'jabatan');
 
-        $page = (@$_GET['page_jabatan']) ? $_GET['page_jabatan'] : 1;
+        $request = service('request');
+        $page = (int) ($request->getGet('page_jabatan') ?? 1);
         $offset = ($page - 1) * $perPage;
 
-        $this->builder->select('jabatan.*, COUNT(pegawai.id) as total_pegawai');
-        $this->builder->join('pegawai', 'pegawai.id_jabatan = jabatan.id', 'left');
-        $this->builder->groupBy('jabatan.id');
-        $this->builder->orderBy('jabatan', 'ASC');
-
-        $total = 0;
+        $builder = $this->db->table('jabatan');
+        $builder->select('jabatan.*, COUNT(pegawai.id) as total_pegawai');
+        $builder->join('pegawai', 'pegawai.id_jabatan = jabatan.id', 'left');
+        $builder->groupBy('jabatan.id');
+        $builder->orderBy('jabatan', 'ASC');
 
         if ($slug) {
-            $countQuery = clone $this->builder;
-            $total = $countQuery->where('slug', $slug)->countAllResults();
-
-            $result = $this->builder->where('slug', $slug)->get($perPage, $offset)->getRowArray();
+            $builder->where('slug', $slug);
         } elseif ($keyword) {
-            $countQuery = clone $this->builder;
+            $builder->like('jabatan', $keyword);
+        }
 
-            $total = $countQuery->ilike('jabatan', $keyword)
-                ->countAllResults();
+        $countQuery = clone $builder;
+        $total = $countQuery->countAllResults();
 
-            $result = $this->builder->ilike('jabatan', $keyword)
-                ->get($perPage, $offset)
-                ->getResult();
+        if ($slug) {
+            $result = $builder->get()->getRowArray();
         } else {
-            $result = $this->builder->get($perPage, $offset)->getResult();
-            $total = $this->builder->countAllResults();
+            $result = $builder->get($perPage, $offset)->getResult();
         }
 
         return [

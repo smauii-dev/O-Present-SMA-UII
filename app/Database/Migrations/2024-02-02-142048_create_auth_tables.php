@@ -31,9 +31,15 @@ class CreateAuthTables extends Migration
         $this->forge->addKey('id', true);
         $this->forge->addUniqueKey('email');
         $this->forge->addUniqueKey('username');
-        $this->forge->addForeignKey('id_pegawai', 'pegawai', 'id', '', 'CASCADE');
+        // Only add FK when creating the table fresh (column present in field list).
+        // If Myth\Auth already created `users` without id_pegawai, createTable is a no-op
+        // and ensureUsersPegawaiColumn() below repairs the schema.
+        if (! $this->db->tableExists('users')) {
+            $this->forge->addForeignKey('id_pegawai', 'pegawai', 'id', '', 'CASCADE');
+        }
 
         $this->forge->createTable('users', true);
+        $this->ensureUsersPegawaiColumn();
 
         // Auth Login Attempts
         $this->forge->addField([
@@ -174,5 +180,62 @@ class CreateAuthTables extends Migration
         $this->forge->dropTable('auth_groups_permissions', true);
         $this->forge->dropTable('auth_groups_users', true);
         $this->forge->dropTable('auth_users_permissions', true);
+    }
+
+    /**
+     * Myth\Auth may create `users` first (without id_pegawai). App requires
+     * users.id_pegawai → pegawai.id. Repair safely on every environment.
+     */
+    private function ensureUsersPegawaiColumn(): void
+    {
+        if (! $this->db->tableExists('users')) {
+            return;
+        }
+
+        if (! $this->db->fieldExists('id_pegawai', 'users')) {
+            $this->forge->addColumn('users', [
+                'id_pegawai' => [
+                    'type'       => 'INT',
+                    'constraint' => 11,
+                    'unsigned'   => true,
+                    'null'       => true,
+                ],
+            ]);
+        }
+
+        if (! $this->db->tableExists('pegawai') || ! $this->db->fieldExists('id_pegawai', 'users')) {
+            return;
+        }
+
+        // Avoid duplicate FK on re-run / mixed Myth+App installs
+        $hasFk = false;
+        try {
+            $row = $this->db->query(
+                "SELECT 1 AS ok
+                 FROM information_schema.table_constraints
+                 WHERE table_schema = current_schema()
+                   AND table_name = 'users'
+                   AND constraint_type = 'FOREIGN KEY'
+                   AND constraint_name = 'users_id_pegawai_foreign'
+                 LIMIT 1"
+            )->getRow();
+            $hasFk = (bool) $row;
+        } catch (\Throwable $e) {
+            $hasFk = false;
+        }
+
+        if (! $hasFk) {
+            try {
+                $this->db->query(
+                    'ALTER TABLE users
+                     ADD CONSTRAINT users_id_pegawai_foreign
+                     FOREIGN KEY (id_pegawai) REFERENCES pegawai(id)
+                     ON UPDATE CASCADE ON DELETE CASCADE'
+                );
+            } catch (\Throwable $e) {
+                // Constraint may already exist under another name — non-fatal
+                log_message('debug', 'users_id_pegawai_foreign: ' . $e->getMessage());
+            }
+        }
     }
 }

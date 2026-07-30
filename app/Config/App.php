@@ -60,6 +60,8 @@ class App extends BaseConfig
      */
     public string $uriProtocol = 'REQUEST_URI';
 
+    public string $permittedURIChars = 'a-z 0-9~%.:_\-';
+
     /**
      * --------------------------------------------------------------------------
      * Default Locale
@@ -157,7 +159,7 @@ class App extends BaseConfig
      *
      * @var array<string, string>
      */
-    public array $proxyIPs = [];
+    public array $proxyIPs = ['172.23.0.0/16' => 'X-Forwarded-For'];
 
     /**
      * --------------------------------------------------------------------------

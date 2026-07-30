@@ -1,0 +1,27 @@
+{% extends 'layouts/app.twig' %}
+{% block content %}
+<div>
+  <div class="page-toolbar">
+    <div class="page-toolbar-meta">
+      <p>Kelola data jabatan pegawai</p>
+    </div>
+    <div class="page-toolbar-actions">
+      <button type="button" hx-get="/admin/jabatan/form" hx-target="#modal-host" class="btn btn-primary btn-sm">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+        Tambah
+      </button>
+    </div>
+  </div>
+
+  <div id="jabatan-loading" class="htmx-indicator flex items-center justify-center py-12 text-sm text-gray-500">
+      <svg class="mr-2 h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+      Memuat data...
+    </div>
+
+  <div id="jabatan-list"
+       hx-get="/admin/jabatan/fragment"
+       hx-trigger="revealed, reloadJabatanTable from:body"
+       hx-indicator="#jabatan-loading">
+  </div>
+</div>
+{% endblock %}

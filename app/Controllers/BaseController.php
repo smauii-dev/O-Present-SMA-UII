@@ -2,75 +2,154 @@
 
 namespace App\Controllers;
 
-use App\Models\UsersModel;
 use CodeIgniter\Controller;
+use Nongbit\Twig\Traits\TwigTrait;
 use Psr\Log\LoggerInterface;
 use CodeIgniter\HTTP\CLIRequest;
-use App\Models\LokasiPresensiModel;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
-/**
- * Class BaseController
- *
- * BaseController provides a convenient place for loading components
- * and performing functions that are needed by all your controllers.
- * Extend this class in any new controllers:
- *     class Home extends BaseController
- *
- * For security be sure to declare any new methods as protected or private.
- */
 abstract class BaseController extends Controller
 {
-    /**
-     * Instance of the main Request object.
-     *
-     * @var CLIRequest|IncomingRequest
-     */
+    use TwigTrait;
+
     protected $request;
 
-    /**
-     * An array of helpers to be loaded automatically upon
-     * class instantiation. These helpers will be available
-     * to all other controllers that extend BaseController.
-     *
-     * @var array
-     */
-    protected $helpers = ['auth', 'form'];
+    protected $helpers = ['auth', 'form', 'geo'];
 
-    /**
-     * Be sure to declare properties for any property fetch you initialized.
-     * The creation of dynamic property is deprecated in PHP 8.2.
-     */
-    // protected $session;
+    private static bool $twigFunctionsRegistered = false;
 
-    protected $usersModel;
-    protected $lokasiModel;
-
-    /**
-     * @return void
-     */
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        // Do Not Edit This Line
         parent::initController($request, $response, $logger);
 
-        // Preload any models, libraries, etc, here.
+        $this->initTwig();
 
-        // E.g.: $this->session = \Config\Services::session();
+        $usersModel = new \App\Models\UsersModel();
+        $lokasiModel = new \App\Models\LokasiPresensiModel();
 
-        $this->usersModel = new UsersModel();
-        $this->lokasiModel = new LokasiPresensiModel();
+        if (function_exists('user_id') && user_id()) {
+            $user_profile = $usersModel->getUserInfo(user_id());
+            if ($user_profile) {
+                $user_lokasi = $lokasiModel->getWhere(['nama_lokasi' => $user_profile->lokasi_presensi])->getFirstRow();
 
-        $user_profile = $this->usersModel->getUserInfo(user_id());
-        $user_lokasi = $this->lokasiModel->getWhere(['nama_lokasi' => $user_profile->lokasi_presensi])->getFirstRow();
-
-        // Zona Waktu
-        if (in_array($user_lokasi->zona_waktu, timezone_identifiers_list())) {
-            date_default_timezone_set($user_lokasi->zona_waktu);
-        } else {
-            date_default_timezone_set('Asia/Jakarta');
+                if ($user_lokasi && in_array($user_lokasi->zona_waktu, timezone_identifiers_list())) {
+                    date_default_timezone_set($user_lokasi->zona_waktu);
+                } else {
+                    date_default_timezone_set('Asia/Jakarta');
+                }
+            }
         }
     }
+
+    protected function view(string $template, array $data = []): string
+    {
+        $data['authUser'] = $this->getAuthUser();
+        $data['currentUrl'] = uri_string();
+        $data['appName'] = 'O-Present';
+        $data['session'] = service('session');
+
+        $this->twig->addGlobals([
+            'session' => service('session'),
+        ]);
+
+        // Register Twig functions only once — the singleton persists across
+        // in-process test requests and Twig throws on duplicate registrations.
+        if (! self::$twigFunctionsRegistered) {
+            $this->twig->addFunctions([
+                'vite' => function (string $entry) {
+                    $manifestPath = ROOTPATH . 'public/build/.vite/manifest.json';
+                    if (! is_file($manifestPath)) {
+                        return '/assets/' . $entry;
+                    }
+                    $manifest = json_decode(file_get_contents($manifestPath), true);
+
+                    $key = 'resources/' . $entry;
+                    if (isset($manifest[$key]['file'])) {
+                        return '/' . $manifest[$key]['file'];
+                    }
+
+                    if (isset($manifest[$entry]['file'])) {
+                        return '/' . $manifest[$entry]['file'];
+                    }
+
+                    foreach ($manifest as $k => $v) {
+                        if (isset($v['src']) && basename($v['src']) === $entry) {
+                            return '/' . $v['file'];
+                        }
+                    }
+
+                    return '/assets/' . $entry;
+                },
+                'vite_css' => function (string $entry) {
+                    $manifestPath = ROOTPATH . 'public/build/.vite/manifest.json';
+                    if (! is_file($manifestPath)) {
+                        return '';
+                    }
+                    $manifest = json_decode(file_get_contents($manifestPath), true);
+
+                    $key = 'resources/' . $entry;
+                    $cssFiles = $manifest[$key]['css'] ?? $manifest[$entry]['css'] ?? [];
+
+                    if (! $cssFiles) {
+                        foreach ($manifest as $k => $v) {
+                            if (isset($v['src']) && basename($v['src']) === $entry) {
+                                $cssFiles = $v['css'] ?? [];
+                                break;
+                            }
+                        }
+                    }
+
+                    $tags = [];
+                    foreach ($cssFiles as $css) {
+                        $tags[] = '<link rel="stylesheet" href="/' . $css . '">';
+                    }
+
+                    return implode("\n  ", $tags);
+                },
+                'old' => function (string $key, string $default = '') {
+                    return old($key, $default);
+                },
+                'csrf_field' => function () {
+                    return csrf_field();
+                },
+                'csrf_token' => function () {
+                    return csrf_token();
+                },
+                'csrf_hash' => function () {
+                    return csrf_hash();
+                },
+            ]);
+            self::$twigFunctionsRegistered = true;
+        }
+
+        return $this->twig->render($template, $data);
+    }
+
+    protected function getAuthUser(): ?object
+    {
+        $auth = service('authentication');
+
+        // Use isLoggedIn() instead of user_id() — user_id() calls check() which
+        // throws RedirectException for force_pass_reset users (broken in CI4 4.7+).
+        if (! $auth->isLoggedIn() || ! $auth->id()) {
+            return null;
+        }
+
+        $usersModel = new \App\Models\UsersModel();
+        $user = $usersModel->getUserInfo($auth->id());
+        
+        if ($user) {
+            if (!empty($user->foto) && $user->foto !== 'default.jpg') {
+                $photoService = new \App\Services\PhotoService();
+                $user->foto_url = $photoService->getProfilePhotoUrl($user->foto);
+            } else {
+                $user->foto_url = base_url('images/default-avatar.svg');
+            }
+        }
+
+        return $user;
+    }
+
 }

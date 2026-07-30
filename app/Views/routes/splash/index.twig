@@ -1,0 +1,240 @@
+{% extends 'layouts/splash.twig' %}
+
+{% block head %}
+<style>
+  .splash-root {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 80% at 50% -10%, oklch(0.45 0.14 250 / 0.55), transparent 55%),
+      radial-gradient(90% 60% at 100% 100%, oklch(0.35 0.08 250 / 0.35), transparent 50%),
+      linear-gradient(165deg, oklch(0.22 0.06 250) 0%, oklch(0.16 0.05 250) 45%, oklch(0.12 0.04 250) 100%);
+    color: white;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  .splash-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(48px);
+    pointer-events: none;
+    opacity: 0.45;
+  }
+  .splash-orb-a {
+    width: 18rem; height: 18rem;
+    top: -4rem; left: -6rem;
+    background: oklch(0.55 0.18 250);
+    animation: splash-float 8s ease-in-out infinite;
+  }
+  .splash-orb-b {
+    width: 14rem; height: 14rem;
+    bottom: 10%; right: -4rem;
+    background: oklch(0.62 0.12 200);
+    animation: splash-float 10s ease-in-out infinite reverse;
+  }
+
+  .splash-mark {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+    animation: splash-enter 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+  }
+
+  .splash-logo-ring {
+    position: relative;
+    width: 6.25rem;
+    height: 6.25rem;
+    border-radius: 1.75rem;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, oklch(1 0 0 / 0.18), oklch(1 0 0 / 0.06));
+    box-shadow:
+      0 0 0 1px oklch(1 0 0 / 0.18),
+      0 24px 48px oklch(0 0 0 / 0.35),
+      inset 0 1px 0 oklch(1 0 0 / 0.25);
+    backdrop-filter: blur(12px);
+  }
+
+  .splash-logo-ring::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 1.9rem;
+    background: conic-gradient(from 200deg, transparent 40%, oklch(0.78 0.12 250), transparent 70%);
+    opacity: 0.7;
+    animation: splash-spin 3.2s linear infinite;
+    z-index: -1;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    padding: 2px;
+  }
+
+  .splash-logo {
+    width: 3.75rem;
+    height: 3.75rem;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px oklch(0 0 0 / 0.25));
+  }
+
+  .splash-title {
+    margin-top: 1.75rem;
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  .splash-sub {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: oklch(1 0 0 / 0.62);
+  }
+
+  .splash-tagline {
+    margin-top: 0.75rem;
+    max-width: 16rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: oklch(1 0 0 / 0.72);
+  }
+
+  .splash-progress {
+    position: relative;
+    z-index: 1;
+    margin-top: 2.75rem;
+    width: min(12rem, 55vw);
+    height: 3px;
+    border-radius: 9999px;
+    background: oklch(1 0 0 / 0.12);
+    overflow: hidden;
+    opacity: 0;
+    animation: splash-enter 0.6s ease 0.55s forwards;
+  }
+
+  .splash-progress > span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, oklch(0.78 0.1 250), oklch(0.92 0.04 220));
+    animation: splash-load 1.65s cubic-bezier(0.4, 0, 0.2, 1) 0.7s forwards;
+  }
+
+  .splash-footer {
+    position: absolute;
+    bottom: max(1.5rem, env(safe-area-inset-bottom));
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: oklch(1 0 0 / 0.38);
+    opacity: 0;
+    animation: splash-enter 0.6s ease 0.9s forwards;
+  }
+
+  .splash-exit {
+    animation: splash-exit 0.45s cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+
+  @keyframes splash-enter {
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes splash-exit {
+    to { opacity: 0; transform: scale(1.04); filter: blur(6px); }
+  }
+  @keyframes splash-load {
+    to { width: 100%; }
+  }
+  @keyframes splash-spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes splash-float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(12px, -18px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .splash-mark,
+    .splash-progress,
+    .splash-footer,
+    .splash-progress > span,
+    .splash-logo-ring::before,
+    .splash-orb-a,
+    .splash-orb-b {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .splash-progress > span { width: 100%; }
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div id="splash"
+     class="splash-root"
+     data-redirect="{{ redirectUrl }}"
+     role="status"
+     aria-live="polite"
+     aria-label="Memuat O-Present">
+  <div class="splash-orb splash-orb-a" aria-hidden="true"></div>
+  <div class="splash-orb splash-orb-b" aria-hidden="true"></div>
+
+  <div class="splash-mark">
+    <div class="splash-logo-ring">
+      <img src="/assets/logo.png" alt="Logo SMA UII" class="splash-logo" width="60" height="60">
+    </div>
+    <h1 class="splash-title">O-Present</h1>
+    <p class="splash-sub">SMA UII Yogyakarta</p>
+    <p class="splash-tagline">Presensi digital yang elegan, akurat, dan terpercaya.</p>
+  </div>
+
+  <div class="splash-progress" aria-hidden="true">
+    <span></span>
+  </div>
+
+  <p class="splash-footer">Sistem Presensi Institusi</p>
+</div>
+
+<script>
+(function () {
+  var root = document.getElementById('splash');
+  if (!root) return;
+
+  var target = root.getAttribute('data-redirect') || '/overview';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var delay = reduced ? 400 : 2400;
+
+  function go() {
+    root.classList.add('splash-exit');
+    setTimeout(function () {
+      window.location.replace(target);
+    }, reduced ? 50 : 420);
+  }
+
+  // Fail-safe: always leave splash even if something blocks timers
+  var timer = setTimeout(go, delay);
+  window.addEventListener('pageshow', function () {
+    clearTimeout(timer);
+    timer = setTimeout(go, Math.min(delay, 800));
+  }, { once: true });
+})();
+</script>
+{% endblock %}

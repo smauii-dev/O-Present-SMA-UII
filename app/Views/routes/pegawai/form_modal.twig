@@ -1,0 +1,99 @@
+{% import 'partials/form_modal.twig' as fm %}
+
+{{ fm.formModal('pegawai', pegawai ? 'Edit Pegawai' : 'Tambah Pegawai', 'md', '/admin/pegawai', pegawai, schemaName='pegawai') }}
+  <div class="space-y-4">
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap</label>
+      <input type="text" name="nama" value="{{ pegawai.nama ?? '' }}" required class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+        @blur="validateField('nama', $el.value)">
+      <template x-if="hasError('nama')">
+        <p class="mt-1 text-xs text-danger-600" x-text="getError('nama')"></p>
+      </template>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+      <input type="email" name="email" value="{{ pegawai.email ?? '' }}" {{ pegawai ? '' : 'required' }} class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+        @blur="validateField('email', $el.value)">
+      <template x-if="hasError('email')">
+        <p class="mt-1 text-xs text-danger-600" x-text="getError('email')"></p>
+      </template>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Jenis Kelamin</label>
+        <select name="jenis_kelamin" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+          @blur="validateField('jenis_kelamin', $el.value)">
+          <option value="">Pilih</option>
+          <option value="Laki-laki" {{ pegawai.jenis_kelamin == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+          <option value="Perempuan" {{ pegawai.jenis_kelamin == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+        </select>
+        <template x-if="hasError('jenis_kelamin')">
+          <p class="mt-1 text-xs text-danger-600" x-text="getError('jenis_kelamin')"></p>
+        </template>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">No. HP</label>
+        <input type="tel" name="no_handphone" value="{{ pegawai.no_handphone ?? '' }}" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+          @blur="validateField('no_handphone', $el.value)">
+        <template x-if="hasError('no_handphone')">
+          <p class="mt-1 text-xs text-danger-600" x-text="getError('no_handphone')"></p>
+        </template>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Alamat</label>
+      <textarea name="alamat" rows="2" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+        @blur="validateField('alamat', $el.value)">{{ pegawai.alamat ?? '' }}</textarea>
+      <template x-if="hasError('alamat')">
+        <p class="mt-1 text-xs text-danger-600" x-text="getError('alamat')"></p>
+      </template>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Jabatan</label>
+        <select name="id_jabatan" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+          @blur="validateField('id_jabatan', $el.value)">
+          <option value="">Pilih</option>
+          {% for j in jabatanList %}
+          <option value="{{ j.id }}" {{ pegawai.id_jabatan == j.id ? 'selected' : '' }}>{{ j.jabatan }}</option>
+          {% endfor %}
+        </select>
+        <template x-if="hasError('id_jabatan')">
+          <p class="mt-1 text-xs text-danger-600" x-text="getError('id_jabatan')"></p>
+        </template>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Lokasi</label>
+        <select name="id_lokasi_presensi" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+          @blur="validateField('id_lokasi_presensi', $el.value)">
+          <option value="">Pilih</option>
+          {% for l in lokasiList %}
+          <option value="{{ l.id }}" {{ pegawai.id_lokasi_presensi == l.id ? 'selected' : '' }}>{{ l.nama_lokasi }}</option>
+          {% endfor %}
+        </select>
+        <template x-if="hasError('id_lokasi_presensi')">
+          <p class="mt-1 text-xs text-danger-600" x-text="getError('id_lokasi_presensi')"></p>
+        </template>
+      </div>
+    </div>
+    {% if not pegawai %}
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Role</label>
+      <select name="role" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20" required
+        @blur="validateField('role', $el.value)">
+        <option value="">Pilih Role</option>
+        {% for r in roles %}
+        <option value="{{ r.name }}">{{ r.description }}</option>
+        {% endfor %}
+      </select>
+      <template x-if="hasError('role')">
+        <p class="mt-1 text-xs text-danger-600" x-text="getError('role')"></p>
+      </template>
+    </div>
+    {% endif %}
+    <div class="modal-actions mt-4 flex justify-end gap-2.5">
+      <button type="button" @click="$dispatch('close-modal')" class="btn btn-secondary btn-sm">Batal</button>
+      <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+    </div>
+  </div>
+{{ fm.end() }}

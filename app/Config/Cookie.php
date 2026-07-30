@@ -3,10 +3,23 @@
 namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
+use CodeIgniter\Services;
 use DateTimeInterface;
 
 class Cookie extends BaseConfig
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Behind proxy: use Lax for same-site, None only if explicitly HTTPS
+        // The Response will add Secure flag when request is actually secure
+        if (ENVIRONMENT === 'production') {
+            $this->samesite = 'Lax';
+            $this->domain   = env('cookie.domain', '') ?: $this->domain;
+        }
+    }
+
     /**
      * --------------------------------------------------------------------------
      * Cookie Prefix

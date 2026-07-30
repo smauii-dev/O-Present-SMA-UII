@@ -1,0 +1,11 @@
+# Bun is the package manager and JS runtime for this project.
+# Prefer: bun install | bun run dev | bun run build
+# Do not use npm/yarn/pnpm for this workspace.
+
+[install]
+exact = false
+auto = true
+
+[run]
+# Prefer Bun's runtime when scripts would otherwise fall back to Node
+bun = true

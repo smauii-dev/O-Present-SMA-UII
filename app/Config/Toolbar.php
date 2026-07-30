@@ -115,4 +115,16 @@ class Toolbar extends BaseConfig
     public array $watchedExtensions = [
         'php', 'css', 'js', 'html', 'svg', 'json', 'env',
     ];
+
+    /**
+     * Skip injecting the full DebugBar <script> into these AJAX responses.
+     * HTMX sends HX-Request: true — without this, fragment HTML can re-include
+     * toolbarloader.js and re-patch XMLHttpRequest → infinite newXHR recursion.
+     *
+     * @var array<string, string|null>
+     */
+    public array $disableOnHeaders = [
+        'X-Requested-With' => 'xmlhttprequest',
+        'HX-Request'       => 'true',
+    ];
 }

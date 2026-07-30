@@ -1,0 +1,69 @@
+# Production compose — accessed ONLY via nginx-proxy (external).
+# Containers communicate via nginx-net; no host port mappings.
+#
+# Usage:
+#   docker compose -f docker/docker-compose.yml up -d --build
+#
+# nginx-proxy (external) routes:
+#   presensi.smauii.sch.id → smauii-opresent-app:80
+#   s3.smauii.sch.id       → smauii-rustfs:9000
+
+services:
+  rustfs:
+    image: rustfs/rustfs:latest
+    container_name: smauii-rustfs
+    environment:
+      TZ: Asia/Jakarta
+      RUSTFS_ROOT_USER: ${RUSTFS_ROOT_USER:-opresent}
+      RUSTFS_ROOT_PASSWORD: ${RUSTFS_ROOT_PASSWORD:-opresent-secret-key}
+      RUSTFS_ACCESS_KEY: ${RUSTFS_ACCESS_KEY:-opresent-access}
+      RUSTFS_SECRET_KEY: ${RUSTFS_SECRET_KEY:-opresent-secret}
+      RUSTFS_CONSOLE_ENABLE: 'true'
+    expose:
+      - '9000'   # S3 API — internal only
+      - '9001'   # Console — internal only
+    volumes:
+      - smauii-rustfs-data:/data
+    networks:
+      - nginx-net
+    restart: always
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  opresent-app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: smauii-opresent:latest
+    container_name: smauii-opresent-app
+    environment:
+      TZ: Asia/Jakarta
+    env_file:
+      - ../.env.production
+    depends_on:
+      rustfs:
+        condition: service_healthy
+    networks:
+      - nginx-net
+    restart: always
+    expose:
+      - '80'    # Apache — internal only, nginx-proxy routes to this
+    volumes:
+      # Pin container .env to production (read-only) to avoid env conflicts
+      - ../.env.production:/var/www/html/.env:ro
+      - smauii-opresent-uploads:/var/www/html/writable/uploads
+      - smauii-opresent-files:/var/www/html/public/assets/file/surat_keterangan_ketidakhadiran
+
+volumes:
+  smauii-rustfs-data:
+  smauii-opresent-uploads:
+    external: true
+  smauii-opresent-files:
+    external: true
+
+networks:
+  nginx-net:
+    external: true

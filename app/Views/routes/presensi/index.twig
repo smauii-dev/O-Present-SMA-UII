@@ -1,0 +1,245 @@
+{% extends 'layouts/app.twig' %}
+{% block content %}
+<div class="mx-auto max-w-lg space-y-4" x-data="presensiClock()" x-init="start()" x-cloak>
+
+  {# Location #}
+  {% if lokasi %}
+  <div class="card p-4">
+    <div class="flex items-start gap-3">
+      <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-100 text-primary-600">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+        </svg>
+      </div>
+      <div class="min-w-0 flex-1">
+        <h3 class="font-semibold text-gray-900 truncate">{{ lokasi.nama_lokasi }}</h3>
+        <p class="text-sm text-gray-500 truncate">{{ lokasi.alamat_lokasi }}</p>
+        <div class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-500">
+          <span>Masuk {{ lokasi.jam_masuk|slice(0,5) }}</span>
+          <span>Pulang {{ lokasi.jam_pulang|slice(0,5) }}</span>
+          <span>Radius {{ lokasi.radius }}m</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {# Clock card #}
+  <div class="card overflow-hidden border border-gray-100 p-6 shadow-xl shadow-gray-200/40 sm:p-8" x-cloak>
+    <div class="mb-6 flex flex-col items-center justify-center rounded-3xl bg-gradient-to-b from-gray-50 to-white p-5 ring-1 ring-gray-100 sm:p-6">
+      <div class="bg-gradient-to-br from-gray-900 to-gray-600 bg-clip-text text-5xl font-black tracking-tighter text-transparent tabular-nums sm:text-6xl" x-text="currentTime">--:--:--</div>
+      <div class="mt-3 rounded-full bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-gray-500 shadow-sm ring-1 ring-gray-200" x-text="currentDate">—</div>
+    </div>
+
+    <div class="mx-auto max-w-md">
+      {% if presensi.sudah_masuk %}
+        {% if not presensi.sudah_pulang %}
+        <form hx-post="/presence/clock-out"
+              hx-swap="none"
+              x-data="{ loading: false }"
+              @submit="loading = true"
+              hx-on::after-request="loading = false; if(event.detail.successful) window.location.reload();">
+          <button type="submit"
+                  class="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-danger-600 px-6 py-5 text-lg font-bold text-white shadow-lg shadow-danger-600/30 transition-all hover:bg-danger-700 active:scale-[0.98] disabled:opacity-70"
+                  :disabled="loading">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+            </svg>
+            <span x-text="loading ? 'Memproses...' : 'Pulang Sekarang'"></span>
+          </button>
+        </form>
+        {% else %}
+        <div class="flex flex-col items-center justify-center rounded-2xl bg-success-50 p-8 text-center ring-1 ring-success-100">
+          <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success-100 text-success-600">
+            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="mb-1 text-lg font-bold text-success-800">Presensi selesai</h3>
+          <p class="text-sm font-medium text-success-600">
+            Masuk {{ presensi.data.jam_masuk|slice(0,5) }}
+            · Pulang {{ presensi.data.jam_keluar|slice(0,5) }}
+          </p>
+          <a href="/attendance-summary" class="mt-4 text-sm font-semibold text-primary-600 hover:text-primary-700">Lihat rekap →</a>
+        </div>
+        {% endif %}
+      {% else %}
+        <div x-data="clockIn()" x-init="init()" class="flex flex-col gap-6">
+          <div class="relative mx-auto h-72 w-full max-w-sm overflow-hidden rounded-3xl bg-black shadow-2xl ring-4 ring-gray-900">
+            <video x-ref="video" autoplay playsinline muted class="h-full w-full object-cover transition-opacity" :class="{ 'opacity-0': photoTaken }"></video>
+            <canvas x-ref="canvas" class="hidden"></canvas>
+            <img x-show="photoTaken" x-cloak :src="photoData" alt="" class="absolute inset-0 h-full w-full object-cover">
+
+            <div x-show="!photoTaken" x-cloak class="pointer-events-none absolute inset-0 m-6">
+              <div class="absolute left-0 top-0 h-8 w-8 rounded-tl-lg border-l-4 border-t-4 border-white/80"></div>
+              <div class="absolute right-0 top-0 h-8 w-8 rounded-tr-lg border-r-4 border-t-4 border-white/80"></div>
+              <div class="absolute bottom-0 left-0 h-8 w-8 rounded-bl-lg border-b-4 border-l-4 border-white/80"></div>
+              <div class="absolute bottom-0 right-0 h-8 w-8 rounded-br-lg border-b-4 border-r-4 border-white/80"></div>
+            </div>
+
+            <div x-show="!photoTaken" x-cloak class="absolute bottom-4 left-0 right-0 flex justify-center">
+              <span class="inline-flex items-center gap-2 rounded-full bg-gray-900/80 px-4 py-2 text-xs font-medium text-white shadow-lg backdrop-blur-md"
+                    :class="{ 'bg-success-600/90': gpsReady, 'bg-danger-600/90': gpsFailed }">
+                <svg x-show="!gpsReady && !gpsFailed" x-cloak class="h-3.5 w-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
+                <span x-text="gpsStatus"></span>
+              </span>
+            </div>
+          </div>
+
+          <form hx-post="/presence/clock-in"
+                hx-swap="none"
+                x-ref="form"
+                hx-on::after-request="loading = false; if(event.detail.successful) window.location.reload();">
+            <input type="hidden" name="latitude" :value="latitude">
+            <input type="hidden" name="longitude" :value="longitude">
+            <input type="hidden" name="foto" :value="photoData">
+
+            <button type="button"
+                    @click="captureAndSubmit()"
+                    class="flex w-full items-center justify-center gap-3 rounded-2xl bg-primary-600 px-6 py-5 text-lg font-bold text-white shadow-lg shadow-primary-600/30 transition-all hover:bg-primary-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+                    :disabled="loading || !gpsReady">
+              <svg x-cloak x-show="loading" class="h-6 w-6 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+              </svg>
+              <span x-text="loading ? 'Memproses kehadiran...' : 'Absen masuk sekarang'">Absen masuk sekarang</span>
+            </button>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {# Today summary #}
+  {% if presensi.sudah_masuk %}
+  <div class="card p-4">
+    <h3 class="mb-3 text-sm font-semibold text-gray-900">Ringkasan hari ini</h3>
+    <div class="space-y-2 text-sm">
+      <div class="flex justify-between gap-3">
+        <span class="text-gray-500">Jam masuk</span>
+        <span class="font-medium tabular-nums text-gray-900">{{ presensi.data.jam_masuk|slice(0,5)|default('—') }}</span>
+      </div>
+      <div class="flex justify-between gap-3">
+        <span class="text-gray-500">Jam pulang</span>
+        <span class="font-medium tabular-nums text-gray-900">{{ presensi.data.jam_keluar ? presensi.data.jam_keluar|slice(0,5) : '—' }}</span>
+      </div>
+      <div class="flex justify-between gap-3">
+        <span class="text-gray-500">Durasi kerja</span>
+        <span class="font-medium text-gray-900">{{ durasi_kerja ?? '—' }}</span>
+      </div>
+      {% if keterlambatan %}
+      <div class="flex justify-between gap-3">
+        <span class="text-gray-500">Keterlambatan</span>
+        <span class="font-medium text-danger-600">{{ keterlambatan }}</span>
+      </div>
+      {% endif %}
+    </div>
+
+    {# Reset button #}
+    <div class="mt-4 pt-4 border-t border-gray-100">
+      <form hx-post="/presence/reset" hx-swap="none" x-data="{ loading: false }"
+            @submit="loading = true"
+            hx-on::after-request="loading = false; if(event.detail.successful) window.location.reload();">
+        <button type="submit" class="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-200 disabled:opacity-50" :disabled="loading">
+          <div class="absolute inset-0 translate-y-full bg-gray-300 transition-transform duration-300 ease-out group-hover:translate-y-0"></div>
+          <svg class="relative h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          <span class="relative" x-text="loading ? 'Memproses...' : 'Reset Presensi Hari Ini'">Reset Presensi Hari Ini</span>
+        </button>
+      </form>
+    </div>
+
+    {% endif %}
+  </div>
+
+<script>
+function presensiClock() {
+  return {
+    currentTime: '--:--:--',
+    currentDate: '—',
+    _timer: null,
+    start() {
+      this.tick();
+      this._timer = setInterval(() => this.tick(), 1000);
+    },
+    tick() {
+      const now = new Date();
+      this.currentTime = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      this.currentDate = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    },
+  };
+}
+
+function clockIn() {
+  return {
+    photoTaken: false,
+    photoData: '',
+    loading: false,
+    latitude: 0,
+    longitude: 0,
+    gpsReady: false,
+    gpsFailed: false,
+    gpsStatus: 'Mengambil lokasi GPS...',
+    init() {
+      this.startCamera();
+      this.startGPS();
+    },
+    startCamera() {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        this.gpsStatus = 'Kamera tidak didukung';
+        this.gpsFailed = true;
+        return;
+      }
+      navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false,
+      }).then((stream) => {
+        this.$refs.video.srcObject = stream;
+      }).catch(() => {
+        this.gpsStatus = 'Kamera tidak tersedia';
+        this.gpsFailed = true;
+      });
+    },
+    startGPS() {
+      if (!navigator.geolocation) {
+        this.gpsStatus = 'GPS tidak didukung browser ini';
+        this.gpsFailed = true;
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          this.latitude = pos.coords.latitude;
+          this.longitude = pos.coords.longitude;
+          this.gpsReady = true;
+          this.gpsFailed = false;
+          this.gpsStatus = 'Lokasi terdeteksi';
+        },
+        () => {
+          this.gpsStatus = 'Gagal mengambil lokasi GPS';
+          this.gpsFailed = true;
+        },
+        { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
+      );
+    },
+    captureAndSubmit() {
+      if (!this.gpsReady || this.loading) return;
+      this.loading = true;
+      const video = this.$refs.video;
+      const canvas = this.$refs.canvas;
+      const ctx = canvas.getContext('2d');
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      ctx.drawImage(video, 0, 0);
+      this.photoData = canvas.toDataURL('image/jpeg', 0.7);
+      this.photoTaken = true;
+      this.$nextTick(() => this.$refs.form.requestSubmit());
+    },
+  };
+}
+</script>
+{% endblock %}

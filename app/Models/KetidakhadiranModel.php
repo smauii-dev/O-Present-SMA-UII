@@ -6,104 +6,74 @@ use CodeIgniter\Model;
 
 class KetidakhadiranModel extends Model
 {
-    protected $builder;
     protected $table = 'ketidakhadiran';
     protected $primaryKey = 'id';
     protected $allowedFields = ['id_pegawai', 'tipe_ketidakhadiran', 'tanggal_mulai', 'tanggal_berakhir', 'deskripsi', 'file', 'status_pengajuan'];
     protected $useTimestamps = true;
-    protected $tempReturnType = 'array';
-
-    public function __construct()
-    {
-        $this->db = \Config\Database::connect();
-        $this->builder = $this->db->table('ketidakhadiran');
-    }
 
     public function getDataKetidakhadiran($id_pegawai = false, $filter = false, $print = false, $perPage = 10)
     {
         $pager = service('pager');
+        $request = service('request');
+
         if ($id_pegawai === false) {
             $pager->setPath('kelola-ketidakhadiran', 'ketidakhadiran');
-            $page = (@$_GET['page_ketidakhadiran']) ? $_GET['page_ketidakhadiran'] : 1;
+            $page = (int) ($request->getGet('page_ketidakhadiran') ?? 1);
         } else {
-            $page = (@$_GET['page']) ? $_GET['page'] : 1;
+            $page = (int) ($request->getGet('page') ?? 1);
         }
 
         $offset = ($page - 1) * $perPage;
 
-        $this->builder->select('ketidakhadiran.*, pegawai.nip, pegawai.nama');
-        $this->builder->join('pegawai', 'pegawai.id = ketidakhadiran.id_pegawai');
-        $this->builder->orderBy('ketidakhadiran.updated_at', 'DESC');
-
-        $total = 0;
-        $bulan_sekarang = date('Y-m');
+        $builder = $this->db->table('ketidakhadiran');
+        $builder->select('ketidakhadiran.*, pegawai.nip, pegawai.nama');
+        $builder->join('pegawai', 'pegawai.id = ketidakhadiran.id_pegawai');
+        $builder->orderBy('ketidakhadiran.updated_at', 'DESC');
 
         if ($id_pegawai) {
-            $this->builder->where('id_pegawai', $id_pegawai);
+            $builder->where('id_pegawai', $id_pegawai);
         }
 
         if ($filter) {
-            $filter_keyword = $filter['keyword'];
-            $filter_bulan = $filter['bulan'];
-            $filter_tahun = $filter['tahun'];
-            $filter_status = $filter['status'];
-            $filter_tipe = $filter['tipe'];
-
-            if ($filter_status) {
-                $this->builder->where('status_pengajuan', $filter_status);
+            if (!empty($filter['status'])) {
+                $builder->where('status_pengajuan', $filter['status']);
             }
-
-            if ($filter_tipe) {
-                $this->builder->where('tipe_ketidakhadiran', $filter_tipe);
+            if (!empty($filter['tipe'])) {
+                $builder->where('tipe_ketidakhadiran', $filter['tipe']);
             }
-
-            if ($filter_keyword) {
+            if (!empty($filter['keyword'])) {
                 if ($id_pegawai) {
-                    $this->builder->groupStart()
-                        ->ilike('deskripsi', $filter_keyword)
-                        ->groupEnd();
+                    $builder->like('deskripsi', $filter['keyword']);
                 } else {
-                    $this->builder->groupStart()
-                        ->ilike('nama', $filter_keyword)
-                        ->orIlike('deskripsi', $filter_keyword)
+                    $builder->groupStart()
+                        ->like('nama', $filter['keyword'])
+                        ->orLike('deskripsi', $filter['keyword'])
                         ->groupEnd();
                 }
             }
-
-            if ($filter_bulan !== null && $filter_tahun !== null) {
-                $bulan_filter = $filter_tahun . '-' . $filter_bulan;
-                $this->builder->groupStart()
-                    ->where("TO_CHAR(tanggal_mulai, 'YYYY-MM') = '" . $bulan_filter . "'")
-                    ->orWhere("TO_CHAR(tanggal_berakhir, 'YYYY-MM') = '" . $bulan_filter . "'")
-                    ->groupEnd();
-            }
-
-            if ($filter_bulan === null && $filter_tahun === null) {
-                $this->builder->groupStart()
-                    ->where("TO_CHAR(tanggal_mulai, 'YYYY-MM') = '" . $bulan_sekarang . "'")
-                    ->orWhere("TO_CHAR(tanggal_berakhir, 'YYYY-MM') = '" . $bulan_sekarang . "'")
+            if (!empty($filter['bulan']) && !empty($filter['tahun'])) {
+                $bulan_filter = $filter['tahun'] . '-' . $filter['bulan'];
+                $builder->groupStart()
+                    ->where("TO_CHAR(tanggal_mulai, 'YYYY-MM')", $bulan_filter)
+                    ->orWhere("TO_CHAR(tanggal_berakhir, 'YYYY-MM')", $bulan_filter)
                     ->groupEnd();
             }
         }
 
-        $countQuery = clone $this->builder;
+        $countQuery = clone $builder;
         $total = $countQuery->countAllResults();
 
         if ($print) {
-            $result = $this->builder->get()->getResult();
+            $result = $builder->get()->getResult();
         } else {
-            $result = $this->builder->get($perPage, $offset)->getResult();
+            $result = $builder->get($perPage, $offset)->getResult();
         }
 
-        if ($id_pegawai === false) {
-            $links = $pager->makeLinks($page, $perPage, $total, 'my_pagination', 0, 'ketidakhadiran');
-        } else {
-            $links = $pager->makeLinks($page, $perPage, $total, 'my_pagination');
-        }
+        $group = ($id_pegawai === false) ? 'ketidakhadiran' : '';
 
         return [
             'ketidakhadiran' => $result,
-            'links' => $links,
+            'links' => $pager->makeLinks($page, $perPage, $total, 'my_pagination', 0, $group),
             'total' => $total,
             'perPage' => $perPage,
             'page' => $page,
@@ -112,54 +82,48 @@ class KetidakhadiranModel extends Model
 
     public function findDataKetidakhadiran($id)
     {
-        $this->builder->select('ketidakhadiran.*, pegawai.nip, pegawai.nama');
-        $this->builder->join('pegawai', 'pegawai.id = ketidakhadiran.id_pegawai');
-        $this->builder->where('ketidakhadiran.id', $id);
-
-        $this->builder->orderBy('ketidakhadiran.updated_at', 'DESC');
-        $query = $this->builder->get();
-
-        return $query->getRow();
+        $builder = $this->db->table('ketidakhadiran');
+        $builder->select('ketidakhadiran.*, pegawai.nip, pegawai.nama');
+        $builder->join('pegawai', 'pegawai.id = ketidakhadiran.id_pegawai');
+        $builder->where('ketidakhadiran.id', $id);
+        $builder->orderBy('ketidakhadiran.updated_at', 'DESC');
+        return $builder->get()->getRow();
     }
 
     public function getDataIzinHariIni($id_pegawai = false, $startDate = false, $endDate = false)
     {
-        $this->builder->select('ketidakhadiran.*');
+        $builder = $this->db->table('ketidakhadiran');
 
         if ($id_pegawai) {
-            $this->builder->where('id_pegawai', $id_pegawai);
+            $builder->where('id_pegawai', $id_pegawai);
         }
 
         if ($startDate && $endDate) {
-            $query = $this->builder->where('tanggal_mulai <=', $startDate)
+            $builder->where('tanggal_mulai <=', $startDate)
                 ->where('tanggal_berakhir >=', $endDate)
-                ->where('status_pengajuan', 'APPROVED')
-                ->get();
+                ->where('status_pengajuan', 'APPROVED');
         } else {
-            $query = $this->builder->where('tanggal_mulai <=', date('Y-m-d'))
+            $builder->where('tanggal_mulai <=', date('Y-m-d'))
                 ->where('tanggal_berakhir >=', date('Y-m-d'))
-                ->where('status_pengajuan', 'APPROVED')
-                ->get();
+                ->where('status_pengajuan', 'APPROVED');
         }
 
-        return $query->getNumRows();
+        return $builder->countAllResults();
     }
 
     public function getMinYear()
     {
-        $this->builder->selectMin('EXTRACT(YEAR FROM tanggal_mulai)', 'min_year');
-        $query = $this->builder->get();
-
-        $result = $query->getRow();
-
-        return $result ? $result->min_year : null;
+        $builder = $this->db->table('ketidakhadiran');
+        $builder->selectMin('tanggal_mulai', 'min_date');
+        $result = $builder->get()->getRow();
+        return $result && $result->min_date ? date('Y', strtotime($result->min_date)) : null;
     }
 
-    public function checkAndUpdateStatus()
+    public function checkAndUpdateStatus(): void
     {
-        $today = date('Y-m-d');
-        $this->builder->where('tanggal_mulai <', $today);
-        $this->builder->where('status_pengajuan', 'PENDING');
-        $this->builder->update(['status_pengajuan' => 'REJECTED']);
+        $builder = $this->db->table('ketidakhadiran');
+        $builder->where('tanggal_mulai <', date('Y-m-d'));
+        $builder->where('status_pengajuan', 'PENDING');
+        $builder->update(['status_pengajuan' => 'REJECTED']);
     }
 }

@@ -1,0 +1,142 @@
+{% import 'partials/form_modal.twig' as fm %}
+{{ fm.formModal('lokasi', lokasi ? 'Edit Lokasi' : 'Tambah Lokasi', 'lg', '/admin/lokasi', lokasi, schemaName='lokasi') }}
+  <div class="space-y-4"
+       x-data="{
+         mapsUrl: '',
+         lat: '{{ lokasi.latitude ?? '' }}',
+         lng: '{{ lokasi.longitude ?? '' }}',
+         parseMaps() {
+           const raw = (this.mapsUrl || '').trim();
+           if (!raw) return;
+           // Client-side mirror of geo_helper::parse_google_maps_url (common patterns)
+           let m;
+           m = raw.match(/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/);
+           if (!m) m = raw.match(/@(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/);
+           if (!m) m = raw.match(/(?:[?&](?:q|ll|destination|center)=)(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/i);
+           if (!m) m = raw.match(/^(-?\d+(?:\.\d+)?)\s*[,;\s]\s*(-?\d+(?:\.\d+)?)$/);
+           if (!m) {
+             window.showToast && window.showToast('Link Maps tidak dikenali. Tempel URL Google Maps lengkap.', 'error');
+             return;
+           }
+           const la = parseFloat(m[1]), lo = parseFloat(m[2]);
+           if (Number.isNaN(la) || Number.isNaN(lo) || la < -90 || la > 90 || lo < -180 || lo > 180) {
+             window.showToast && window.showToast('Koordinat di link tidak valid.', 'error');
+             return;
+           }
+           this.lat = la.toFixed(7);
+           this.lng = lo.toFixed(7);
+           window.showToast && window.showToast('Koordinat diisi dari Google Maps', 'success');
+         }
+       }">
+
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lokasi</label>
+      <input type="text" name="nama_lokasi" value="{{ lokasi.nama_lokasi ?? '' }}" required
+             placeholder="contoh: SMA UII Gedung Depan"
+             class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+             @blur="validateField('nama_lokasi', $el.value)">
+      <p class="mt-1 text-xs text-gray-500">Harus unik — tidak boleh sama dengan lokasi lain.</p>
+      <template x-if="hasError('nama_lokasi')">
+        <p class="mt-1 text-xs text-danger-600" x-text="getError('nama_lokasi')"></p>
+      </template>
+    </div>
+
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Alamat</label>
+      <textarea name="alamat_lokasi" rows="2"
+                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+                @blur="validateField('alamat_lokasi', $el.value)">{{ lokasi.alamat_lokasi ?? '' }}</textarea>
+      <template x-if="hasError('alamat_lokasi')">
+        <p class="mt-1 text-xs text-danger-600" x-text="getError('alamat_lokasi')"></p>
+      </template>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tipe Lokasi</label>
+        <select name="tipe_lokasi"
+                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+                @blur="validateField('tipe_lokasi', $el.value)">
+          <option value="Pusat" {{ (lokasi.tipe_lokasi ?? 'Pusat') == 'Pusat' ? 'selected' : '' }}>Pusat</option>
+          <option value="Cabang" {{ (lokasi.tipe_lokasi ?? '') == 'Cabang' ? 'selected' : '' }}>Cabang</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Radius (meter)</label>
+        <input type="number" name="radius" min="10" value="{{ lokasi.radius ?? '100' }}"
+               class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+               @blur="validateField('radius', Number($el.value))">
+        <p class="mt-1 text-xs text-gray-500">Minimal 10 m. Geofence clock-in.</p>
+      </div>
+    </div>
+
+    {# ── Google Maps link → fills lat/lng ───────────────── #}
+    <div class="rounded-xl border border-primary-100 bg-primary-50/40 p-3 space-y-2">
+      <label class="block text-sm font-semibold text-gray-800">Link Google Maps</label>
+      <p class="text-xs text-gray-600 leading-relaxed">
+        Tempel URL pin dari Google Maps (Share → Salin link). Koordinat diisi otomatis.
+        Boleh juga tempel <code class="text-[11px]">-7.814236, 110.376172</code>.
+      </p>
+      <div class="flex gap-2">
+        <input type="url" x-model="mapsUrl" name="maps_url" placeholder="https://www.google.com/maps/place/..."
+               class="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+               @keydown.enter.prevent="parseMaps()">
+        <button type="button" class="btn btn-secondary btn-sm shrink-0" @click="parseMaps()">Ambil titik</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Latitude</label>
+        <input type="text" name="latitude" required inputmode="decimal"
+               x-model="lat" :value="lat"
+               placeholder="-7.8143300"
+               class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm font-mono focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+               @blur="validateField('latitude', Number($el.value))">
+        <template x-if="hasError('latitude')">
+          <p class="mt-1 text-xs text-danger-600" x-text="getError('latitude')"></p>
+        </template>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Longitude</label>
+        <input type="text" name="longitude" required inputmode="decimal"
+               x-model="lng" :value="lng"
+               placeholder="110.3760340"
+               class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm font-mono focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+               @blur="validateField('longitude', Number($el.value))">
+        <template x-if="hasError('longitude')">
+          <p class="mt-1 text-xs text-danger-600" x-text="getError('longitude')"></p>
+        </template>
+      </div>
+    </div>
+    <p class="text-xs text-gray-500 -mt-2">Pasangan lat/lng harus unik — tidak boleh titik yang sama dengan lokasi lain.</p>
+
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Jam Masuk</label>
+        <input type="time" name="jam_masuk" value="{{ lokasi.jam_masuk is defined and lokasi.jam_masuk ? lokasi.jam_masuk|slice(0,5) : '07:00' }}" required
+               class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Jam Pulang</label>
+        <input type="time" name="jam_pulang" value="{{ lokasi.jam_pulang is defined and lokasi.jam_pulang ? lokasi.jam_pulang|slice(0,5) : '15:30' }}" required
+               class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20">
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Zona Waktu</label>
+      <select name="zona_waktu"
+              class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20">
+        <option value="Asia/Jakarta" {{ (lokasi.zona_waktu ?? 'Asia/Jakarta') in ['Asia/Jakarta','WIB'] ? 'selected' : '' }}>Asia/Jakarta (WIB)</option>
+        <option value="Asia/Makassar" {{ (lokasi.zona_waktu ?? '') == 'Asia/Makassar' ? 'selected' : '' }}>Asia/Makassar (WITA)</option>
+        <option value="Asia/Jayapura" {{ (lokasi.zona_waktu ?? '') == 'Asia/Jayapura' ? 'selected' : '' }}>Asia/Jayapura (WIT)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="modal-actions mt-4 flex justify-end gap-2.5">
+    <button type="button" @click="$dispatch('close-modal')" class="btn btn-secondary btn-sm">Batal</button>
+    <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+  </div>
+{{ fm.end() }}

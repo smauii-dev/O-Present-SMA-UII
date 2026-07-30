@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Debug\TwigExceptionHandler;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Debug\ExceptionHandler;
 use CodeIgniter\Debug\ExceptionHandlerInterface;
@@ -99,6 +100,7 @@ class Exceptions extends BaseConfig
      */
     public function handler(int $statusCode, Throwable $exception): ExceptionHandlerInterface
     {
-        return new ExceptionHandler($this);
+        // HTML requests get Twig error pages; non-HTML get JSON; fallback to raw PHP.
+        return new TwigExceptionHandler($this);
     }
 }

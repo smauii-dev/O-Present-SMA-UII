@@ -1,4 +1,0 @@
-* text=auto
-*.php linguist-detectable=true
-*.js linguist-detectable=false
-*.css linguist-detectable=false

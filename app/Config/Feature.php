@@ -10,21 +10,22 @@ use CodeIgniter\Config\BaseConfig;
 class Feature extends BaseConfig
 {
     /**
-     * Enable multiple filters for a route or not.
-     *
-     * If you enable this:
-     *   - CodeIgniter\CodeIgniter::handleRequest() uses:
-     *     - CodeIgniter\Filters\Filters::enableFilters(), instead of enableFilter()
-     *   - CodeIgniter\CodeIgniter::tryToRouteIt() uses:
-     *     - CodeIgniter\Router\Router::getFilters(), instead of getFilter()
-     *   - CodeIgniter\Router\Router::handle() uses:
-     *     - property $filtersInfo, instead of $filterInfo
-     *     - CodeIgniter\Router\RouteCollection::getFiltersForRoute(), instead of getFilterForRoute()
-     */
-    public bool $multipleFilters = false;
-
-    /**
      * Use improved new auto routing instead of the default legacy version.
      */
-    public bool $autoRoutesImproved = false;
+    public bool $autoRoutesImproved = true;
+
+    /**
+     * Use the old Filter Execution Order.
+     */
+    public bool $oldFilterOrder = false;
+
+    /**
+     * If true, limit(0) will be treated as "no limit".
+     */
+    public bool $limitZeroAsAll = true;
+
+    /**
+     * If true, strict locale negotiation is enabled.
+     */
+    public bool $strictLocaleNegotiation = false;
 }

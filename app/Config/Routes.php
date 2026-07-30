@@ -6,85 +6,182 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-$routes->get('/', 'Home::index', ['filter' => 'role:admin,pegawai']);
-$routes->post('/waktu', 'Home::getWaktu');
-$routes->get('/waktu', function () {
-    return redirect()->to('/');
+// ============================================================
+// Web Routes (Twig server-rendered pages)
+// ============================================================
+
+// Public Routes
+$routes->group('', ['namespace' => 'App\Controllers\Web'], static function ($routes) {
+    // Splash entrypoint → client redirects to /overview
+    $routes->get('/', 'Overview::splash');
+
+    // Health check endpoint for integration testing
+    $routes->get('health', 'Overview::health');
+
+    // Auth
+    $routes->get('login', 'Auth::login');
+    $routes->post('login', 'Auth::loginAction');
+    $routes->get('forgot-password', 'Auth::forgot');
+    $routes->post('forgot-password', 'Auth::forgotAction');
+    $routes->get('reset-password', 'Auth::reset');
+    $routes->post('reset-password', 'Auth::resetAction');
+    $routes->post('logout', 'Auth::logout');
 });
-$routes->get('/admin', 'Admin::index', ['filter' => 'role:admin,head']);
 
-$routes->get('/jabatan', 'Jabatan::index', ['filter' => 'role:admin,head']);
-$routes->post('/jabatan/store', 'Jabatan::store', ['filter' => 'role:admin,head']);
-$routes->get('/cari-jabatan', 'Jabatan::pencarianJabatan', ['filter' => 'role:admin,head']);
-$routes->get('/jabatan/(:segment)', 'Jabatan::edit/$1', ['filter' => 'role:admin,head']);
-$routes->post('/jabatan/update', 'Jabatan::update', ['filter' => 'role:admin,head']);
-$routes->delete('/jabatan/(:num)', 'Jabatan::delete/$1', ['filter' => 'role:admin,head']);
+// Profile Routes — uses forcePasswordReset filter (instead of login) so force_pass_reset
+// users can access /profile to change their password without triggering Myth\Auth's broken
+// RedirectException (CI4 4.7 removed the class Myth\Auth still references).
+$routes->group('', ['namespace' => 'App\Controllers\Web', 'filter' => 'forcePasswordReset:requireAuth'], static function ($routes) {
+    $routes->get('profile', 'Profile::index');
+    $routes->post('profile/update', 'Profile::updateProfileAction');
+    $routes->post('profile/photo', 'Profile::uploadPhotoAction');
+    $routes->post('profile/password', 'Profile::changePasswordAction');
+    $routes->post('profile/password/force', 'Profile::forceChangePasswordAction');
+});
 
-$routes->get('/lokasi-presensi', 'LokasiPresensi::index', ['filter' => 'role:admin,head']);
-$routes->get('/tambah-lokasi-presensi', 'LokasiPresensi::add', ['filter' => 'role:admin,head']);
-$routes->post('/lokasi-presensi/store', 'LokasiPresensi::store', ['filter' => 'role:admin,head']);
-$routes->get('/cari-lokasi', 'LokasiPresensi::pencarianLokasi', ['filter' => 'role:admin,head']);
-$routes->get('/lokasi-presensi/edit/(:segment)', 'LokasiPresensi::edit/$1', ['filter' => 'role:admin,head']);
-$routes->post('/lokasi-presensi/update', 'LokasiPresensi::update', ['filter' => 'role:admin,head']);
-$routes->delete('/lokasi-presensi/(:num)', 'LokasiPresensi::delete/$1', ['filter' => 'role:admin,head']);
-$routes->get('/lokasi-presensi/(:any)', 'LokasiPresensi::detail/$1', ['filter' => 'role:admin,head']);
-$routes->post('/lokasi-presensi/excel', 'LokasiPresensi::dataLokasiExcel', ['filter' => 'role:admin,head']);
+// Protected Routes (requires login)
+$routes->group('', ['namespace' => 'App\Controllers\Web', 'filter' => 'login'], static function ($routes) {
+    // Overview (app entrypoint after splash / login)
+    $routes->get('overview', 'Overview::index');
 
-$routes->get('/data-pegawai', 'Pegawai::index', ['filter' => 'role:admin,head']);
-$routes->get('/tambah-data-pegawai', 'Pegawai::add', ['filter' => 'role:admin,head']);
-$routes->post('/data-pegawai/store', 'Pegawai::store', ['filter' => 'role:admin,head']);
-$routes->get('/cari-pegawai', 'Pegawai::pencarianPegawai', ['filter' => 'role:admin,head']);
-$routes->get('/data-pegawai/edit/(:segment)', 'Pegawai::edit/$1', ['filter' => 'role:admin,head']);
-$routes->post('/data-pegawai/update', 'Pegawai::update', ['filter' => 'role:admin,head']);
+    // Presence (Clock-in/Clock-out & Absence) — views/routes/presence
+    $routes->get('presence', 'Presence::index');
+    $routes->post('presence/clock-in', 'Presence::clockIn');
+    $routes->post('presence/clock-out', 'Presence::clockOut');
+    $routes->post('presence/reset', 'Presence::resetToday');
 
-$routes->delete('/data-pegawai/(:num)', 'Pegawai::delete/$1', ['filter' => 'role:admin,head']);
-$routes->post('/hapus-foto/(:segment)', 'Pegawai::hapusFoto/$1', ['filter' => 'role:admin,head']);
-$routes->post('/data-pegawai/excel', 'Pegawai::dataPegawaiExcel', ['filter' => 'role:admin,head']);
+    // Absence — Izin/Cuti/Sakit
+    $routes->get('absence', 'Absence::index');
+    $routes->get('absence/fragment', 'Absence::fragment');
+    $routes->get('absence/form', 'Absence::form');
+    $routes->get('absence/form/(:num)', 'Absence::form/$1');
+    $routes->post('absence', 'Absence::save');
+    $routes->post('absence/(:num)', 'Absence::save/$1');
+    $routes->delete('absence/(:num)', 'Absence::delete/$1');
 
-$routes->post('/presensi-masuk', 'Presensi::presensiMasuk');
-$routes->post('/presensi-masuk/simpan', 'Presensi::simpanPresensiMasuk');
+    // Attendance Summary
+    $routes->get('attendance-summary', 'AttendanceSummary::index');
+    $routes->get('attendance-summary/fragment', 'AttendanceSummary::fragment');
+    $routes->post('attendance-summary/export', 'AttendanceSummary::export');
 
-$routes->post('/presensi-keluar', 'Presensi::presensiKeluar');
-$routes->post('/presensi-keluar/simpan', 'Presensi::simpanPresensiKeluar');
+    // Media Proxy
+    $routes->get('media/(:any)', 'Media::serve/$1');
 
-$routes->get('/rekap-presensi', 'Presensi::rekapPresensiPegawai', ['filter' => 'role:admin,pegawai']);
-$routes->get('/laporan-presensi-harian', 'Presensi::laporanHarian', ['filter' => 'role:admin,head']);
-$routes->get('/laporan-presensi-bulanan', 'Presensi::laporanBulanan', ['filter' => 'role:admin,head']);
-$routes->post('/laporan-presensi-harian/excel', 'Presensi::laporanHarianExcel', ['filter' => 'role:admin,head']);
-$routes->post('/laporan-presensi-bulanan/excel', 'Presensi::laporanBulananExcel', ['filter' => 'role:admin,head']);
-$routes->post('/rekap-presensi/excel', 'Presensi::rekapPresensiPegawaiExcel', ['filter' => 'role:admin,pegawai']);
+    // Admin Routes
+    $routes->group('admin', ['filter' => 'role:admin,head'], static function ($routes) {
+        // Pegawai
+        $routes->get('pegawai', 'Pegawai::index');
+        $routes->get('pegawai/fragment', 'Pegawai::fragment');
+        $routes->get('pegawai/form', 'Pegawai::form');
+        $routes->get('pegawai/form/(:num)', 'Pegawai::form/$1');
+        $routes->get('pegawai/import-form', 'Pegawai::importForm');
+        $routes->post('pegawai', 'Pegawai::save');
+        $routes->post('pegawai/(:num)', 'Pegawai::save/$1');
+        $routes->delete('pegawai/(:num)', 'Pegawai::delete/$1');
+        $routes->post('pegawai/reset-password/(:num)', 'Pegawai::resetPassword/$1');
 
-$routes->get('/ketidakhadiran', 'Ketidakhadiran::index', ['filter' => 'role:admin,pegawai']);
-$routes->get('/pengajuan-ketidakhadiran', 'Ketidakhadiran::add', ['filter' => 'role:admin,pegawai']);
-$routes->post('/pengajuan-ketidakhadiran/store', 'Ketidakhadiran::store', ['filter' => 'role:admin,pegawai']);
-$routes->delete('/ketidakhadiran/(:num)', 'Ketidakhadiran::delete/$1', ['filter' => 'role:admin,pegawai']);
-$routes->get('/ketidakhadiran/edit/(:num)', 'Ketidakhadiran::edit/$1', ['filter' => 'role:admin,pegawai']);
-$routes->post('/ketidakhadiran/update', 'Ketidakhadiran::update', ['filter' => 'role:admin,pegawai']);
-$routes->get('/cari-ketidakhadiran', 'Ketidakhadiran::pencarianKetidakhadiranPegawai', ['filter' => 'role:admin,pegawai']);
-$routes->post('/ketidakhadiran/excel', 'Ketidakhadiran::dataKetidakhadiranExcel', ['filter' => 'role:admin,pegawai']);
+        // Jabatan
+        $routes->get('jabatan', 'Jabatan::index');
+        $routes->get('jabatan/fragment', 'Jabatan::fragment');
+        $routes->get('jabatan/form', 'Jabatan::form');
+        $routes->get('jabatan/form/(:num)', 'Jabatan::form/$1');
+        $routes->post('jabatan', 'Jabatan::save');
+        $routes->post('jabatan/(:num)', 'Jabatan::save/$1');
+        $routes->delete('jabatan/(:num)', 'Jabatan::delete/$1');
 
-$routes->get('/kelola-ketidakhadiran', 'Ketidakhadiran::kelolaKetidakhadiran', ['filter' => 'role:head']);
-$routes->get('/kelola-ketidakhadiran/(:num)', 'Ketidakhadiran::kelolaKetidakhadiranAksi/$1', ['filter' => 'role:head']);
-$routes->post('/kelola-ketidakhadiran/store', 'Ketidakhadiran::updateStatusKetidakhadiran', ['filter' => 'role:head']);
-$routes->post('/kelola-ketidakhadiran/excel', 'Ketidakhadiran::kelolaKetidakhadiranExcel', ['filter' => 'role:head']);
-$routes->get('/cari-data-ketidakhadiran', 'Ketidakhadiran::pencarianDataKetidakhadiran', ['filter' => 'role:head']);
+        // Lokasi
+        $routes->get('lokasi', 'Lokasi::index');
+        $routes->get('lokasi/fragment', 'Lokasi::fragment');
+        $routes->get('lokasi/form', 'Lokasi::form');
+        $routes->get('lokasi/form/(:num)', 'Lokasi::form/$1');
+        $routes->post('lokasi', 'Lokasi::save');
+        $routes->post('lokasi/(:num)', 'Lokasi::save/$1');
+        $routes->delete('lokasi/(:num)', 'Lokasi::delete/$1');
 
-$routes->get('/profile', 'UserProfile::index');
-$routes->get('/profile/edit', 'UserProfile::editProfile');
-$routes->post('/profile/hapus-foto', 'UserProfile::hapusFoto');
-$routes->post('/profile/update', 'UserProfile::update');
+        // Absence Management (Admin)
+        $routes->get('absence/admin', 'Absence::admin');
+        $routes->get('absence/admin/fragment', 'Absence::adminFragment');
+        $routes->post('absence/admin/status/(:num)', 'Absence::updateStatus/$1');
+    });
+});
 
-$routes->post('/send-password-token', 'UserProfile::passwordToken');
-$routes->post('/send-email-token', 'UserProfile::emailToken');
+// ============================================================
+// API Routes (Pure JSON API)
+// ============================================================
+$routes->group('api', function ($routes) {
+    // Public
+    $routes->post('login', 'Api\Auth::login');
+    $routes->post('forgot-password', 'Api\Auth::forgot');
+    $routes->post('reset-password', 'Api\Auth::reset');
 
-$routes->get('/change-email', 'UserProfile::changeEmail');
-$routes->post('/update-email', 'UserProfile::attemptChangeEmail');
+    // Protected — session-based auth
+    $routes->group('', ['filter' => 'apiSessionAuth'], function ($routes) {
+        // Auth
+        $routes->post('logout', 'Api\Auth::logout');
+        $routes->get('me', 'Api\Auth::me');
 
-// Rute untuk Download Template
-$routes->get('/data-pegawai/downloadTemplate', 'Pegawai::downloadTemplate', ['filter' => 'role:head']);
+        // Dashboard
+        $routes->get('dashboard', 'Api\Dashboard::index');
 
-// Jangan lupa ubah juga untuk rute Import Excel-nya agar nanti tidak 404 saat proses upload!
-$routes->post('/data-pegawai/importExcel', 'Pegawai::importExcel', ['filter' => 'role:head']);
+        // Presence (Clock in/out)
+        $routes->get('presence/today', 'Api\Presence::today');
+        $routes->post('presence/clock-in', 'Api\Presence::clockIn');
+        $routes->post('presence/clock-out', 'Api\Presence::clockOut');
+        $routes->get('presence/rekap', 'Api\Presence::rekap');
+        $routes->post('presence/export/rekap', 'Api\Presence::exportRekap');
+        $routes->post('presence/export/harian', 'Api\Presence::exportHarian');
+        $routes->post('presence/export/bulanan', 'Api\Presence::exportBulanan');
 
+        // Profile
+        $routes->get('profile', 'Api\Profile::index');
+        $routes->post('profile/update', 'Api\Profile::updateProfile');
+        $routes->post('profile/photo', 'Api\Profile::uploadPhoto');
+        $routes->post('profile/password', 'Api\Profile::changePassword');
+        $routes->post('profile/password/force', 'Api\Profile::forceChangePassword');
 
-$routes->get('/data-pegawai/(:any)', 'Pegawai::detail/$1', ['filter' => 'role:admin,head']);
+        // Pegawai
+        $routes->get('pegawai', 'Api\Pegawai::index');
+        $routes->get('pegawai/(:num)', 'Api\Pegawai::detail/$1');
+        $routes->post('pegawai', 'Api\Pegawai::store');
+        $routes->put('pegawai/(:num)', 'Api\Pegawai::update/$1');
+        $routes->delete('pegawai/(:num)', 'Api\Pegawai::delete/$1');
+        $routes->post('pegawai/export', 'Api\Pegawai::exportExcel');
+        $routes->post('pegawai/import', 'Api\Pegawai::importExcel');
+        $routes->get('pegawai/template', 'Api\Pegawai::downloadTemplate');
+
+        // Absence (Izin/Cuti/Sakit)
+        $routes->get('absence', 'Api\Absence::index');
+        $routes->get('absence/today', 'Api\Absence::today');
+        $routes->post('absence', 'Api\Absence::store');
+        $routes->get('absence/(:num)', 'Api\Absence::detail/$1');
+        $routes->put('absence/(:num)', 'Api\Absence::update/$1');
+        $routes->delete('absence/(:num)', 'Api\Absence::delete/$1');
+        $routes->post('absence/export', 'Api\Absence::exportExcel');
+    });
+
+    // Admin-only
+    $routes->group('admin', ['filter' => 'apiSessionAuth:admin,head'], function ($routes) {
+        // Roles (auth_groups) for forms
+        $routes->get('roles', 'Api\Admin\Role::index');
+
+        // Jabatan
+        $routes->get('jabatan', 'Api\Admin\Jabatan::index');
+        $routes->get('jabatan/(:num)', 'Api\Admin\Jabatan::detail/$1');
+        $routes->post('jabatan', 'Api\Admin\Jabatan::store');
+        $routes->put('jabatan/(:num)', 'Api\Admin\Jabatan::update/$1');
+        $routes->delete('jabatan/(:num)', 'Api\Admin\Jabatan::delete/$1');
+
+        // Lokasi Presensi
+        $routes->get('lokasi', 'Api\Admin\LokasiPresensi::index');
+        $routes->get('lokasi/(:num)', 'Api\Admin\LokasiPresensi::detail/$1');
+        $routes->post('lokasi', 'Api\Admin\LokasiPresensi::store');
+        $routes->put('lokasi/(:num)', 'Api\Admin\LokasiPresensi::update/$1');
+        $routes->delete('lokasi/(:num)', 'Api\Admin\LokasiPresensi::delete/$1');
+        $routes->post('lokasi/export', 'Api\Admin\LokasiPresensi::exportExcel');
+
+        // Absence (admin)
+        $routes->get('absence/admin', 'Api\Admin\Absence::index');
+        $routes->post('absence/admin/(:num)/status', 'Api\Admin\Absence::updateStatus/$1');
+        $routes->post('absence/export', 'Api\Admin\Absence::exportExcel');
+    });
+});

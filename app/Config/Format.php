@@ -3,7 +3,6 @@
 namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
-use CodeIgniter\Format\FormatterInterface;
 use CodeIgniter\Format\JSONFormatter;
 use CodeIgniter\Format\XMLFormatter;
 
@@ -26,8 +25,8 @@ class Format extends BaseConfig
      */
     public array $supportedResponseFormats = [
         'application/json',
-        'application/xml', // machine-readable XML
-        'text/xml', // human-readable XML
+        'application/xml',
+        'text/xml',
     ];
 
     /**
@@ -63,15 +62,5 @@ class Format extends BaseConfig
         'text/xml'         => 0,
     ];
 
-    /**
-     * A Factory method to return the appropriate formatter for the given mime type.
-     *
-     * @return FormatterInterface
-     *
-     * @deprecated This is an alias of `\CodeIgniter\Format\Format::getFormatter`. Use that instead.
-     */
-    public function getFormatter(string $mime)
-    {
-        return Services::format()->getFormatter($mime);
-    }
+    public int $jsonEncodeDepth = 512;
 }

@@ -1,0 +1,47 @@
+{# 
+  Form Modal Macro (open/close pair)
+  Combines modal shell with standardized form structure
+
+  Usage:
+    {% import 'partials/form_modal.twig' as formModal %}
+    {{ formModal.formModal('pegawai', 'Tambah Pegawai', 'md', '/admin/pegawai', pegawai, schemaName='pegawai') }}
+      <div class="space-y-4">
+        {# form fields #}
+      </div>
+      <div class="modal-actions mt-6 pt-4 border-t">
+        <button type="button" @click="$dispatch('close-modal')" class="btn btn-secondary btn-sm">Batal</button>
+        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+      </div>
+    {{ formModal.end() }}
+#}
+
+{% macro formModal(id, title, size='md', action='', data=null, schemaName=null, centered=true, method='POST', enctype=null) %}
+{% import 'partials/modal.twig' as modal %}
+{{ modal.modal(id, title, size, centered) }}
+  <form 
+    hx-{{ method|lower }}="{{ action }}{{ data and data.id ? '/' ~ data.id : '' }}" 
+    hx-swap="none" 
+    class="space-y-4" 
+    {% if enctype %}enctype="{{ enctype }}"{% endif %}
+    {% if schemaName %}x-data="validation(schemas.{{ schemaName }})"{% endif %}
+    {% if schemaName %}@submit="if (!validateAll(Object.fromEntries(new FormData($event.target)))) { $event.preventDefault(); }"{% endif %}
+    x-ref="form"
+    {% if schemaName %}
+    x-init="
+      $watch('_validation.errors', (v) => {
+        if (Object.keys(v).length === 0) return;
+        // HTMX will handle server validation errors via HX-Trigger
+      });
+    "
+    {% endif %}
+  >
+    {% if schemaName %}
+    <input type="hidden" name="_schema" value="{{ schemaName }}">
+    {% endif %}
+{% endmacro %}
+
+{% macro end() %}
+  </form>
+  </div>{# panel from modal.modal() #}
+</div>{# backdrop from modal.modal() #}
+{% endmacro %}

@@ -1,0 +1,110 @@
+{# Pegawai list fragment for HTMX #}
+{% if pegawai is empty %}
+<div class="card p-8 text-center">
+  <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+  </svg>
+  <p class="mt-3 text-sm text-gray-500">Tidak ada data pegawai</p>
+</div>
+{% else %}
+
+{# Mobile cards #}
+<div class="sm:hidden space-y-2">
+  {% for item in pegawai %}
+  <div class="card p-4" x-data>
+    <div class="flex items-center gap-3">
+      <div class="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gray-200">
+        {% if item.foto_url %}
+          <img src="{{ item.foto_url }}" alt="" class="h-full w-full object-cover" loading="lazy">
+        {% else %}
+          <div class="flex h-full w-full items-center justify-center bg-primary-100 text-xs font-bold text-primary-700">{{ item.nama|first|upper }}</div>
+        {% endif %}
+      </div>
+      <div class="min-w-0 flex-1">
+        <p class="truncate text-sm font-medium text-gray-900">{{ item.nama }}</p>
+        <p class="truncate text-xs text-gray-500">{{ item.nip }} &middot; {{ item.jabatan ?? '-' }}</p>
+      </div>
+      <div class="row-actions">
+        <button hx-get="/admin/pegawai/form/{{ item.id }}" hx-target="#modal-host" class="icon-btn">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
+        </button>
+        <button hx-post="/admin/pegawai/reset-password/{{ item.id }}" hx-confirm="Yakin ingin reset password user ini? User wajib ganti password saat login berikutnya." hx-swap="none" class="icon-btn icon-btn-warning" title="Reset Password">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+        </button>
+        <button hx-delete="/admin/pegawai/{{ item.id }}" hx-confirm="Yakin ingin menghapus pegawai ini?" hx-swap="none" class="icon-btn icon-btn-danger">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{# Desktop table #}
+<div class="hidden sm:block card overflow-hidden">
+  <div class="overflow-x-auto w-full">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+        <tr>
+          <th class="px-4 py-3">Nama</th>
+          <th class="px-4 py-3">NIP</th>
+          <th class="px-4 py-3">Jabatan</th>
+          <th class="px-4 py-3">Lokasi</th>
+          <th class="px-4 py-3">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        {% for item in pegawai %}
+        <tr class="hover:bg-gray-50" x-data>
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-3">
+              <div class="h-8 w-8 shrink-0 overflow-hidden rounded-full bg-gray-200">
+                {% if item.foto_url %}
+                  <img src="{{ item.foto_url }}" alt="" class="h-full w-full object-cover" loading="lazy">
+                {% else %}
+                  <div class="flex h-full w-full items-center justify-center bg-primary-100 text-xs font-bold text-primary-700">{{ item.nama|first|upper }}</div>
+                {% endif %}
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">{{ item.nama }}</p>
+                <p class="text-xs text-gray-500">{{ item.email }}</p>
+              </div>
+            </div>
+          </td>
+          <td class="px-4 py-3 text-gray-600">{{ item.nip }}</td>
+          <td class="px-4 py-3 text-gray-600">{{ item.jabatan ?? '-' }}</td>
+          <td class="px-4 py-3 text-gray-600">{{ item.nama_lokasi ?? '-' }}</td>
+          <td class="px-4 py-3">
+            <div class="row-actions">
+              <button hx-get="/admin/pegawai/form/{{ item.id }}" hx-target="#modal-host" class="icon-btn">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
+              </button>
+              <button hx-post="/admin/pegawai/reset-password/{{ item.id }}" hx-confirm="Yakin ingin reset password user ini? User wajib ganti password saat login berikutnya." hx-swap="none" class="icon-btn icon-btn-warning" title="Reset Password">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+              </button>
+              <button hx-delete="/admin/pegawai/{{ item.id }}" hx-confirm="Yakin ingin menghapus pegawai ini?" hx-swap="none" class="icon-btn icon-btn-danger">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{# Pagination #}
+{% if totalHalaman is defined and totalHalaman > 1 %}
+<div class="mt-4 flex items-center justify-center gap-2">
+  {% for h in 1..totalHalaman %}
+  <button type="button"
+     hx-get="/admin/pegawai/fragment?page={{ h }}&search={{ search ?? '' }}"
+     hx-target="#pegawai-list"
+     class="page-btn {{ h == (halaman ?? 1) ? 'is-active' : '' }}">
+    {{ h }}
+  </button>
+  {% endfor %}
+</div>
+{% endif %}
+{% endif %}

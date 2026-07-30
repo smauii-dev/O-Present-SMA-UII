@@ -1,0 +1,237 @@
+{% import 'partials/form_modal.twig' as fm %}
+{{ fm.formModal('ketidakhadiran', ketidakhadiran ? 'Edit Pengajuan' : 'Ajukan Ketidakhadiran', 'md', '/absence', ketidakhadiran, schemaName='ketidakhadiran', method='POST', enctype='multipart/form-data') }}
+  <div 
+    x-data="{ 
+      tipe: '{{ ketidakhadiran.tipe_ketidakhadiran ?? '' }}', 
+      loading: false,
+      activeTab: 'form'
+    }"
+    @htmx:config-request.window="if ($event.detail.elt === $refs.form) loading = true"
+    @htmx:after-request.window="if ($event.detail.elt === $refs.form) loading = false"
+    class="space-y-4"
+  >
+    {# Tab Navigation (Only shown if file exists) #}
+    {% if ketidakhadiran.file_url %}
+      <div class="flex border-b border-gray-200 mb-4 gap-4">
+        <button 
+          type="button" 
+          class="pb-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all"
+          :class="activeTab === 'form' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-400 hover:text-gray-600'"
+          @click="activeTab = 'form'"
+        >
+          Form Pengajuan
+        </button>
+        <button 
+          type="button" 
+          class="pb-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition-all"
+          :class="activeTab === 'preview' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-400 hover:text-gray-600'"
+          @click="activeTab = 'preview'"
+        >
+          Pratinjau Bukti
+        </button>
+      </div>
+    {% endif %}
+
+    {# Tab 1: Form Fields #}
+    <div x-show="activeTab === 'form'" class="space-y-4" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
+      {# Tipe Ketidakhadiran Selection #}
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tipe Ketidakhadiran</label>
+        <select 
+          name="tipe_ketidakhadiran" 
+          x-model="tipe" 
+          class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm transition-colors focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20" 
+          required
+          @blur="validateField('tipe_ketidakhadiran', tipe)"
+        >
+          <option value="">Pilih</option>
+          <option value="SAKIT" {{ (ketidakhadiran.tipe_ketidakhadiran ?? '') == 'SAKIT' ? 'selected' : '' }}>Sakit</option>
+          <option value="IZIN" {{ (ketidakhadiran.tipe_ketidakhadiran ?? '') == 'IZIN' ? 'selected' : '' }}>Izin</option>
+          <option value="CUTI" {{ (ketidakhadiran.tipe_ketidakhadiran ?? '') == 'CUTI' ? 'selected' : '' }}>Cuti</option>
+        </select>
+        
+        {# Error display #}
+        <template x-if="hasError('tipe_ketidakhadiran')">
+          <p class="mt-1 text-xs text-danger-600" x-text="getError('tipe_ketidakhadiran')"></p>
+        </template>
+        
+        {# Interactive Warning/Notification badges based on Type selected #}
+        <div class="mt-4 transition-all duration-300" x-show="tipe" x-cloak>
+          <template x-if="tipe === 'SAKIT'">
+            <span class="inline-flex items-center gap-1.5 text-xs text-success-700 font-semibold bg-success-50 px-3 py-1.5 rounded-xl border border-success-100">
+              <svg class="h-4 w-4 text-success-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Keterangan: Sakit akan otomatis disetujui sistem.
+            </span>
+          </template>
+          <template x-if="tipe === 'IZIN' || tipe === 'CUTI'">
+            <span class="inline-flex items-center gap-1.5 text-xs text-warning-700 font-semibold bg-warning-50 px-3 py-1.5 rounded-xl border border-warning-100">
+              <svg class="h-4 w-4 text-warning-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              Memerlukan verifikasi & persetujuan Admin/Kepala Sekolah.
+            </span>
+          </template>
+        </div>
+      </div>
+
+      {# Date Range Selection #}
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tanggal Mulai</label>
+          <input 
+            type="date" 
+            name="tanggal_mulai" 
+            value="{{ ketidakhadiran.tanggal_mulai ?? '' }}" 
+            required 
+            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm transition-colors focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+            @blur="validateField('tanggal_mulai', $el.value)"
+          >
+          <template x-if="hasError('tanggal_mulai')">
+            <p class="mt-1 text-xs text-danger-600" x-text="getError('tanggal_mulai')"></p>
+          </template>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tanggal Berakhir</label>
+          <input 
+            type="date" 
+            name="tanggal_berakhir" 
+            value="{{ ketidakhadiran.tanggal_berakhir ?? '' }}" 
+            required 
+            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm transition-colors focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+            @blur="validateField('tanggal_berakhir', $el.value)"
+          >
+          <template x-if="hasError('tanggal_berakhir')">
+            <p class="mt-1 text-xs text-danger-600" x-text="getError('tanggal_berakhir')"></p>
+          </template>
+        </div>
+      </div>
+
+      {# Description Textarea #}
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Deskripsi / Alasan</label>
+        <textarea 
+          name="deskripsi" 
+          rows="3" 
+          class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm transition-colors focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20" 
+          placeholder="Jelaskan detail alasan ketidakhadiran..."
+          @blur="validateField('deskripsi', $el.value)"
+        >{{ ketidakhadiran.deskripsi ?? '' }}</textarea>
+        <template x-if="hasError('deskripsi')">
+          <p class="mt-1 text-xs text-danger-600" x-text="getError('deskripsi')"></p>
+        </template>
+      </div>
+
+      {# File Upload Dropzone (Interactive) #}
+      <div 
+        x-data="{
+          fileName: '{{ ketidakhadiran.file ?? '' }}',
+          isDragOver: false,
+          handleFileChange(e) {
+            const file = e.target.files[0];
+            this.fileName = file ? file.name : '';
+            validateField('bukti', file);
+          },
+          handleDrop(e) {
+            const files = e.dataTransfer.files;
+            if (files && files.length > 0) {
+              this.$refs.buktiInput.files = files;
+              const changeEvent = new Event('change', { bubbles: true });
+              this.$refs.buktiInput.dispatchEvent(changeEvent);
+            }
+          }
+        }"
+        class="space-y-1.5"
+      >
+        <label class="block text-sm font-semibold text-gray-700">Bukti Pendukung (opsional)</label>
+        
+        <div 
+          class="relative rounded-xl border-2 border-dashed p-4 transition-all duration-300 flex flex-col items-center justify-center text-center cursor-pointer select-none"
+          :class="isDragOver ? 'border-primary-500 bg-primary-50/40 ring-4 ring-primary-500/10' : (fileName ? 'border-success-500 bg-success-50/5' : 'border-gray-300 hover:border-gray-400 bg-gray-50/50')"
+          @dragover.prevent="isDragOver = true"
+          @dragleave.prevent="isDragOver = false"
+          @drop.prevent="isDragOver = false; handleDrop($event)"
+          @click="$refs.buktiInput.click()"
+        >
+          <input 
+            x-ref="buktiInput" 
+            type="file" 
+            name="bukti" 
+            accept=".jpg,.jpeg,.png,.pdf" 
+            class="hidden" 
+            @change="handleFileChange($event)"
+          >
+
+          <div class="flex items-center gap-3">
+            <div class="rounded-xl p-2.5 transition-colors duration-300" 
+                 :class="fileName ? 'bg-success-100 text-success-600' : 'bg-gray-100 text-gray-400'">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+            </div>
+            <div class="text-left min-w-0 max-w-[240px]">
+              <span class="text-xs font-bold text-gray-700 truncate block" x-text="fileName ? fileName : 'Pilih file atau seret ke sini'"></span>
+              <p class="text-[10px] text-gray-400 mt-0.5" x-show="!fileName">Mendukung file .jpg, .jpeg, .png, .pdf</p>
+              <p class="text-[10px] text-success-600 font-semibold mt-0.5" x-show="fileName" x-cloak>Bukti pendukung siap diunggah</p>
+            </div>
+          </div>
+        </div>
+        <template x-if="hasError('bukti')">
+          <p class="mt-1 text-xs text-danger-600" x-text="getError('bukti')"></p>
+        </template>
+      </div>
+    </div>
+
+    {# Tab 2: Document / Image Preview #}
+    {% if ketidakhadiran.file_url %}
+      {% set isPdf = ketidakhadiran.file|split('.')|last|lower == 'pdf' %}
+      <div x-show="activeTab === 'preview'" class="space-y-4" x-cloak x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
+        <div class="rounded-2xl border border-gray-100 bg-gray-50/50 p-4 flex items-center justify-center min-h-[300px]">
+          {% if isPdf %}
+            <div class="flex flex-col items-center justify-center p-6 text-center">
+              <div class="rounded-2xl bg-primary-100 p-4 text-primary-600 mb-3 shadow-sm">
+                <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h4 class="text-sm font-bold text-gray-800">Dokumen Bukti Pendukung (PDF)</h4>
+              <p class="text-xs text-gray-400 mt-1.5 mb-5 max-w-xs">Berkas diunggah dalam format PDF. Klik tombol di bawah ini untuk melihat atau mengunduh dokumen.</p>
+              <a href="{{ ketidakhadiran.file_url }}" target="_blank" class="btn btn-primary btn-sm shadow-md">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                Buka Berkas PDF
+              </a>
+            </div>
+          {% else %}
+            <div class="relative max-w-full">
+              <img src="{{ ketidakhadiran.file_url }}" alt="Bukti Pendukung" class="max-w-full max-h-[320px] object-contain rounded-xl shadow-md border border-white ring-1 ring-black/5 bg-white">
+              <div class="mt-4 text-center">
+                <a href="{{ ketidakhadiran.file_url }}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-primary-600 hover:text-primary-700 transition-colors">
+                  <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  Perbesar Gambar
+                </a>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    {# Footer Action Buttons #}
+    <div class="modal-actions mt-6 pt-4 border-t border-gray-100 flex justify-end gap-2.5">
+      <button type="button" @click="$dispatch('close-modal')" class="btn btn-secondary btn-sm" :disabled="loading">Batal</button>
+      <button type="submit" class="btn btn-primary btn-sm" :disabled="loading" x-show="activeTab === 'form'">
+        <svg x-show="loading" x-cloak class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+        </svg>
+        <span x-text="loading ? 'Menyimpan...' : 'Simpan Pengajuan'">Simpan Pengajuan</span>
+      </button>
+    </div>
+  </div>
+{{ fm.end() }}

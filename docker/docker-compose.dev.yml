@@ -1,0 +1,109 @@
+# Development environment — ISOLATED from production.
+# Purpose:
+#   - Local dev with hot-reload (Vite HMR) + CI4 backend
+#   - Separate PostgreSQL (smauii-opresent-db-dev) — NEVER touches production DB
+#   - NOT accessible publicly — only via docker exec or SSH tunnel
+#
+# Usage:
+#   docker compose -f docker/docker-compose.dev.yml up -d --build
+#   bun run dev            # Vite HMR (5173) + spark serve inside app container
+#   bun run dev:setup      # migrate + seed dev database
+#   docker compose -f docker/docker-compose.dev.yml down
+#
+# Access:
+#   - Via docker exec: docker exec -it smauii-opresent-app-dev bash
+#   - Via SSH tunnel: ssh -L 8100:localhost:8080 user@server
+
+services:
+  # ─────────────────────────────────────────────
+  # PostgreSQL 16 — dev database
+  # ─────────────────────────────────────────────
+  smauii-opresent-db-dev:
+    image: postgres:16-alpine
+    container_name: smauii-opresent-db-dev
+    environment:
+      POSTGRES_DB: opresent_dev
+      POSTGRES_USER: opresent
+      POSTGRES_PASSWORD: opresent_dev
+      TZ: Asia/Jakarta
+    volumes:
+      - smauii-opresent-db-dev:/var/lib/postgresql/data
+    networks:
+      - smauii-dev-net
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U opresent -d opresent_dev']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  # ─────────────────────────────────────────────
+  # Rustfs (S3-compatible) — dev object storage
+  # ─────────────────────────────────────────────
+  smauii-rustfs-dev:
+    image: rustfs/rustfs:latest
+    container_name: smauii-rustfs-dev
+    environment:
+      TZ: Asia/Jakarta
+      RUSTFS_ROOT_USER: opresent
+      RUSTFS_ROOT_PASSWORD: opresent-dev-secret
+      RUSTFS_ACCESS_KEY: opresent-access
+      RUSTFS_SECRET_KEY: opresent-secret
+      RUSTFS_CONSOLE_ENABLE: 'true'
+    expose:
+      - '9000'   # S3 API — internal only
+      - '9001'   # Console — internal only
+    volumes:
+      - smauii-rustfs-dev-data:/data
+    networks:
+      - smauii-dev-net
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ─────────────────────────────────────────────
+  # PHP + Apache — main application container
+  # ─────────────────────────────────────────────
+  smauii-opresent-app-dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: smauii-opresent:dev
+    container_name: smauii-opresent-app-dev
+    environment:
+      TZ: Asia/Jakarta
+    env_file:
+      - ../.env.dev
+    depends_on:
+      smauii-opresent-db-dev:
+        condition: service_healthy
+      smauii-rustfs-dev:
+        condition: service_healthy
+    networks:
+      - smauii-dev-net
+    ports:
+      - "8100:80"    # Apache → host 8100 (matches app.baseURL)
+      # - "8082:8080"  # Vite HMR / spark serve → host 8082 (optional, uncomment if needed)
+    expose:
+      - '80'     # Apache — internal
+      - '8080'   # spark serve — internal
+    volumes:
+      - ..:/var/www/html
+      # Pin container .env to .env.dev (read-only) to avoid env conflicts
+      - ../.env.dev:/var/www/html/.env:ro
+      - smauii-opresent-dev-uploads:/var/www/html/writable/uploads
+      - smauii-opresent-dev-files:/var/www/html/public/assets/file/surat_keterangan_ketidakhadiran
+    restart: unless-stopped
+
+volumes:
+  smauii-opresent-db-dev:
+  smauii-rustfs-dev-data:
+  smauii-opresent-dev-uploads:
+  smauii-opresent-dev-files:
+
+networks:
+  smauii-dev-net:
+    driver: bridge

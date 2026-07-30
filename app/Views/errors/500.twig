@@ -1,0 +1,19 @@
+{% extends 'layouts/base.twig' %}
+{% block body %}
+<div class="flex min-h-dvh items-center justify-center bg-gray-50 p-4">
+  <div class="text-center">
+    <p class="text-6xl font-bold text-danger-600">!</p>
+    <h1 class="mt-4 text-xl font-semibold text-gray-900">Terjadi Kesalahan</h1>
+    <p class="mt-2 text-sm text-gray-500">Ups... Ada sesuatu yang tidak beres! Silakan coba lagi nanti.</p>
+    {% if message is defined and message %}
+      <p class="mt-2 text-xs text-gray-400">{{ message }}</p>
+    {% endif %}
+    <a href="/" class="btn btn-primary mt-6">
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Kembali ke Beranda
+    </a>
+  </div>
+</div>
+{% endblock %}

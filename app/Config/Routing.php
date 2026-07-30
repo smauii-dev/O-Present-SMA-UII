@@ -110,4 +110,10 @@ class Routing extends BaseRouting
      * @var array [ uri_segment => namespace ]
      */
     public array $moduleRoutes = [];
+
+    public bool $useControllerAttributes = true;
+
+    public bool $multipleSegmentsOneParam = false;
+
+    public bool $translateUriToCamelCase = true;
 }

@@ -1,0 +1,2261 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Cannot call method getRow\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 1
+			path: app/Core/Repositories/AbsenceRepository.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AbsenceRepository\\:\\:findById\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AbsenceRepository.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AbsenceRepository\\:\\:getMinYear\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AbsenceRepository.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AbsenceRepository\\:\\:getUserIdByEmployeeId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AbsenceRepository.php
+
+		-
+			message: "#^Property App\\\\Repositories\\\\AbsenceRepository\\:\\:\\$model has no type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AbsenceRepository.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AbsenceRepositoryInterface\\:\\:findById\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AbsenceRepositoryInterface.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AbsenceRepositoryInterface\\:\\:getMinYear\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AbsenceRepositoryInterface.php
+
+		-
+			message: "#^Cannot call method getRow\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 1
+			path: app/Core/Repositories/AttendanceRepository.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AttendanceRepository\\:\\:findTodayByEmployee\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AttendanceRepository.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AttendanceRepository\\:\\:getMinDate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AttendanceRepository.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AttendanceRepository\\:\\:getMinYear\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AttendanceRepository.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AttendanceRepository\\:\\:getUserIdByEmployeeId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AttendanceRepository.php
+
+		-
+			message: "#^Property App\\\\Repositories\\\\AttendanceRepository\\:\\:\\$model has no type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AttendanceRepository.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AttendanceRepositoryInterface\\:\\:findTodayByEmployee\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AttendanceRepositoryInterface.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AttendanceRepositoryInterface\\:\\:getMinDate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AttendanceRepositoryInterface.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\AttendanceRepositoryInterface\\:\\:getMinYear\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/AttendanceRepositoryInterface.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\EmployeeRepository\\:\\:findByUsername\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/EmployeeRepository.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\EmployeeRepository\\:\\:findWithUser\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/EmployeeRepository.php
+
+		-
+			message: "#^Property App\\\\Repositories\\\\EmployeeRepository\\:\\:\\$employeeModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/EmployeeRepository.php
+
+		-
+			message: "#^Property App\\\\Repositories\\\\EmployeeRepository\\:\\:\\$locationModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/EmployeeRepository.php
+
+		-
+			message: "#^Property App\\\\Repositories\\\\EmployeeRepository\\:\\:\\$positionModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/EmployeeRepository.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\EmployeeRepositoryInterface\\:\\:findByUsername\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/EmployeeRepositoryInterface.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\EmployeeRepositoryInterface\\:\\:findWithUser\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Repositories/EmployeeRepositoryInterface.php
+
+		-
+			message: "#^Method App\\\\Repositories\\\\PositionRepository\\:\\:delete\\(\\) should return bool but returns bool\\|string\\.$#"
+			count: 1
+			path: app/Core/Repositories/PositionRepository.php
+
+		-
+			message: "#^Function user not found\\.$#"
+			count: 1
+			path: app/Core/Services/AbsenceService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\AbsenceService\\:\\:saveFile\\(\\) has parameter \\$file with no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/AbsenceService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\AbsenceService\\:\\:\\$absenceModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/AbsenceService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\AbsenceService\\:\\:\\$absenceRepository has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/AbsenceService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\AbsenceService\\:\\:\\$attendanceModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/AbsenceService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\AttendanceService\\:\\:getTodayAttendance\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Services/AttendanceService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\AttendanceService\\:\\:\\$attendanceRepository has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/AttendanceService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\AttendanceService\\:\\:\\$locationModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/AttendanceService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\AttendanceService\\:\\:\\$usersModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/AttendanceService.php
+
+		-
+			message: "#^Call to an undefined static method Config\\\\Services\\:\\:download\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeExportService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\EmployeeExportService\\:\\:exportExcel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeExportService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\EmployeeExportService\\:\\:\\$employeeModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeExportService.php
+
+		-
+			message: "#^Variable \\$status might not be defined\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeExportService.php
+
+		-
+			message: "#^Call to method getExtension\\(\\) on an unknown class UploadedFile\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeImportService.php
+
+		-
+			message: "#^Call to method getRealPath\\(\\) on an unknown class UploadedFile\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeImportService.php
+
+		-
+			message: "#^Call to method isValid\\(\\) on an unknown class UploadedFile\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeImportService.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function str_pad expects string, int given\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeImportService.php
+
+		-
+			message: "#^Parameter \\$file of method App\\\\Services\\\\EmployeeImportService\\:\\:importFromExcel\\(\\) has invalid type UploadedFile\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeImportService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\EmployeeImportService\\:\\:\\$employeeModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeImportService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\EmployeeImportService\\:\\:\\$employeeRepository has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeImportService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\EmployeeImportService\\:\\:\\$usersModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeImportService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\EmployeeImportService\\:\\:\\$usersRoleModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeImportService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\EmployeePhotoService\\:\\:\\$employeeModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeePhotoService.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeService.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Models\\\\EmployeeModel\\:\\:insertID\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeService.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Models\\\\LocationModel\\:\\:get\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeService.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Models\\\\UserModel\\:\\:insertID\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeService.php
+
+		-
+			message: "#^Cannot access property \\$group_id on array\\<int, array\\<string, bool\\|string\\>\\>\\.$#"
+			count: 1
+			path: app/Core/Services/EmployeeService.php
+
+		-
+			message: "#^Cannot access property \\$idUser on array\\<string, string\\>\\.$#"
+			count: 2
+			path: app/Core/Services/EmployeeService.php
+
+		-
+			message: "#^Call to an undefined static method Config\\\\Services\\:\\:download\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Services/LocationExportService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\LocationExportService\\:\\:exportExcel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Core/Services/LocationExportService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\LocationExportService\\:\\:\\$locationModel has no type specified\\.$#"
+			count: 1
+			path: app/Core/Services/LocationExportService.php
+
+		-
+			message: "#^Function url_title not found\\.$#"
+			count: 2
+			path: app/Core/Services/PositionService.php
+
+		-
+			message: "#^Method App\\\\Transformers\\\\AbsenceTransformer\\:\\:collection\\(\\) has parameter \\$absences with no type specified\\.$#"
+			count: 1
+			path: app/Core/Transformers/AbsenceTransformer.php
+
+		-
+			message: "#^Method App\\\\Transformers\\\\AbsenceTransformer\\:\\:toArray\\(\\) has parameter \\$absence with no type specified\\.$#"
+			count: 1
+			path: app/Core/Transformers/AbsenceTransformer.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$clock_out_photo\\.$#"
+			count: 1
+			path: app/Core/Transformers/AttendanceTransformer.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$clock_out_time\\.$#"
+			count: 1
+			path: app/Core/Transformers/AttendanceTransformer.php
+
+		-
+			message: "#^Method App\\\\Transformers\\\\AttendanceTransformer\\:\\:toArray\\(\\) has parameter \\$attendance with no type specified\\.$#"
+			count: 1
+			path: app/Core/Transformers/AttendanceTransformer.php
+
+		-
+			message: "#^Method App\\\\Transformers\\\\AttendanceTransformer\\:\\:toDetailArray\\(\\) has parameter \\$attendance with no type specified\\.$#"
+			count: 1
+			path: app/Core/Transformers/AttendanceTransformer.php
+
+		-
+			message: "#^Method App\\\\Transformers\\\\AttendanceTransformer\\:\\:toDetailArray\\(\\) has parameter \\$lateness with no type specified\\.$#"
+			count: 1
+			path: app/Core/Transformers/AttendanceTransformer.php
+
+		-
+			message: "#^Method App\\\\Transformers\\\\AttendanceTransformer\\:\\:toDetailArray\\(\\) has parameter \\$workHours with no type specified\\.$#"
+			count: 1
+			path: app/Core/Transformers/AttendanceTransformer.php
+
+		-
+			message: "#^Method App\\\\Transformers\\\\EmployeeTransformer\\:\\:toArray\\(\\) has parameter \\$employee with no type specified\\.$#"
+			count: 1
+			path: app/Core/Transformers/EmployeeTransformer.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 2
+			path: app/Core/ViewModels/AbsenceViewModel.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 6
+			path: app/Core/ViewModels/AbsenceViewModel.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 2
+			path: app/Core/ViewModels/AttendanceViewModel.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 6
+			path: app/Core/ViewModels/AttendanceViewModel.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 8
+			path: app/Core/ViewModels/EmployeeViewModel.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 13
+			path: app/Core/ViewModels/EmployeeViewModel.php
+
+		-
+			message: "#^Cannot cast mixed to float\\.$#"
+			count: 2
+			path: app/Core/ViewModels/LocationViewModel.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 2
+			path: app/Core/ViewModels/LocationViewModel.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 7
+			path: app/Core/ViewModels/LocationViewModel.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 2
+			path: app/Core/ViewModels/PositionViewModel.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 2
+			path: app/Core/ViewModels/PositionViewModel.php
+
+		-
+			message: "#^Access to an undefined property CodeIgniter\\\\Database\\\\ConnectionInterface\\:\\:\\$DBDriver\\.$#"
+			count: 1
+			path: app/Database/Migrations/2026-07-17-000001_add_departments_and_classes.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\Database\\\\ConnectionInterface\\:\\:insertID\\(\\)\\.$#"
+			count: 1
+			path: app/Database/Migrations/2026-07-17-000002_backfill_departments_and_classes.php
+
+		-
+			message: "#^Cannot call method getResult\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 1
+			path: app/Database/Migrations/2026-07-17-000002_backfill_departments_and_classes.php
+
+		-
+			message: "#^Cannot call method getRow\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 2
+			path: app/Database/Migrations/2026-07-17-000002_backfill_departments_and_classes.php
+
+		-
+			message: "#^Cannot call method getResult\\(\\) on bool\\|CodeIgniter\\\\Database\\\\BaseResult\\<mixed, mixed\\>\\|CodeIgniter\\\\Database\\\\Query\\.$#"
+			count: 1
+			path: app/Database/Migrations/2026-07-17-000003_backfill_user_roles.php
+
+		-
+			message: "#^Cannot call method getRow\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 1
+			path: app/Database/Migrations/2026-07-17-000003_backfill_user_roles.php
+
+		-
+			message: "#^Class App\\\\Entities\\\\GroupModel not found\\.$#"
+			count: 1
+			path: app/Entities/User.php
+
+		-
+			message: "#^Class App\\\\Entities\\\\PermissionModel not found\\.$#"
+			count: 1
+			path: app/Entities/User.php
+
+		-
+			message: "#^Function model not found\\.$#"
+			count: 2
+			path: app/Entities/User.php
+
+		-
+			message: "#^Method App\\\\Entities\\\\User\\:\\:isActivated\\(\\) should return bool but returns mixed\\.$#"
+			count: 1
+			path: app/Entities/User.php
+
+		-
+			message: "#^Method App\\\\Entities\\\\User\\:\\:setActive\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Entities/User.php
+
+		-
+			message: "#^Method App\\\\Entities\\\\User\\:\\:setForcePassReset\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Entities/User.php
+
+		-
+			message: "#^Method App\\\\Entities\\\\User\\:\\:setPassword\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Entities/User.php
+
+		-
+			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, mixed given\\.$#"
+			count: 1
+			path: app/Entities/User.php
+
+		-
+			message: "#^Function calculateLatenessFormatted\\(\\) has parameter \\$clockInTime with no type specified\\.$#"
+			count: 1
+			path: app/Helpers/attendance_helper.php
+
+		-
+			message: "#^Function calculateLatenessFormatted\\(\\) has parameter \\$officeCheckInTime with no type specified\\.$#"
+			count: 1
+			path: app/Helpers/attendance_helper.php
+
+		-
+			message: "#^Function calculateLatenessSeconds\\(\\) has parameter \\$clockInTime with no type specified\\.$#"
+			count: 1
+			path: app/Helpers/attendance_helper.php
+
+		-
+			message: "#^Function calculateLatenessSeconds\\(\\) has parameter \\$officeCheckInTime with no type specified\\.$#"
+			count: 1
+			path: app/Helpers/attendance_helper.php
+
+		-
+			message: "#^Function calculateWorkHoursFormatted\\(\\) has parameter \\$clockInDate with no type specified\\.$#"
+			count: 1
+			path: app/Helpers/attendance_helper.php
+
+		-
+			message: "#^Function calculateWorkHoursFormatted\\(\\) has parameter \\$clockInTime with no type specified\\.$#"
+			count: 1
+			path: app/Helpers/attendance_helper.php
+
+		-
+			message: "#^Function calculateWorkHoursFormatted\\(\\) has parameter \\$clockOutDate with no type specified\\.$#"
+			count: 1
+			path: app/Helpers/attendance_helper.php
+
+		-
+			message: "#^Function calculateWorkHoursFormatted\\(\\) has parameter \\$clockOutTime with no type specified\\.$#"
+			count: 1
+			path: app/Helpers/attendance_helper.php
+
+		-
+			message: "#^Cannot access offset 'file' on mixed\\.$#"
+			count: 1
+			path: app/Helpers/vite_helper.php
+
+		-
+			message: "#^Cannot access offset string on mixed\\.$#"
+			count: 1
+			path: app/Helpers/vite_helper.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
+			count: 1
+			path: app/Helpers/vite_helper.php
+
+		-
+			message: "#^Binary operation \"\\-\" between 'A7' and 1 results in an error\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Binary operation \"\\-\" between non\\-falsy\\-string and 1 results in an error\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:getVar\\(\\)\\.$#"
+			count: 4
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Function user_id not found\\.$#"
+			count: 2
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceManagementController\\:\\:exportExcel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceManagementController\\:\\:manage\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceManagementController\\:\\:review\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceManagementController\\:\\:review\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceManagementController\\:\\:search\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\AbsenceManagementController\\:\\:\\$absenceModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\AbsenceManagementController\\:\\:\\$absenceService has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Variable \\$filter in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceManagementController.php
+
+		-
+			message: "#^Binary operation \"\\-\" between 'A9' and 1 results in an error\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Binary operation \"\\-\" between non\\-falsy\\-string and 1 results in an error\\.$#"
+			count: 2
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Models\\\\AbsenceModel\\:\\:get\\(\\)\\.$#"
+			count: 3
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Services\\\\AbsenceService\\:\\:uploadDocument\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:getFile\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:getVar\\(\\)\\.$#"
+			count: 11
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Cannot call method format\\(\\) on DateTime\\|false\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Cannot call method setError\\(\\) on CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\.$#"
+			count: 2
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Cannot call method validateCreate\\(\\) on CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Function user_id not found\\.$#"
+			count: 9
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceRequestController\\:\\:delete\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceRequestController\\:\\:delete\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceRequestController\\:\\:edit\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceRequestController\\:\\:edit\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceRequestController\\:\\:exportExcel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceRequestController\\:\\:search\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceRequestController\\:\\:store\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AbsenceRequestController\\:\\:update\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Method App\\\\Services\\\\AbsenceService\\:\\:updateRequest\\(\\) invoked with 3 parameters, 1 required\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Parameter \\#1 \\$data of method App\\\\Services\\\\AbsenceService\\:\\:createRequest\\(\\) expects array, App\\\\DTOs\\\\CreateAbsenceDTO given\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\AbsenceRequestController\\:\\:\\$validator \\(CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\) does not accept App\\\\Validators\\\\AbsenceValidator\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between mixed~'' and '' will always evaluate to false\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Variable \\$filter in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: app/Http/Controllers/AbsenceRequestController.php
+
+		-
+			message: "#^Access to an undefined property CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:\\$user\\.$#"
+			count: 5
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Cannot call method getErrors\\(\\) on CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\.$#"
+			count: 2
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\Api\\:\\:absenceHistory\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\Api\\:\\:attendanceHistory\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\Api\\:\\:attendanceToday\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\Api\\:\\:clockIn\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\Api\\:\\:clockOut\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\Api\\:\\:getEmployeeForUser\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\Api\\:\\:getEmployeeForUser\\(\\) has parameter \\$user with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\Api\\:\\:\\$attendanceModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\Api\\:\\:\\$attendanceService has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\Api\\:\\:\\$employeeModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\Api\\:\\:\\$formats has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:getVar\\(\\)\\.$#"
+			count: 12
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Cannot call method getErrors\\(\\) on CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\.$#"
+			count: 2
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Cannot call method validateClockIn\\(\\) on CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Cannot call method validateClockOut\\(\\) on CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Cannot cast array\\<int\\|string, mixed\\>\\|bool\\|float\\|int\\|stdClass\\|string\\|null to float\\.$#"
+			count: 2
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Cannot cast mixed to float\\.$#"
+			count: 4
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Cannot cast mixed to int\\.$#"
+			count: 3
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Cannot cast non\\-empty\\-array\\<int\\|string, mixed\\>\\|float\\|int\\<min, \\-1\\>\\|int\\<1, max\\>\\|stdClass\\|non\\-falsy\\-string\\|true to float\\.$#"
+			count: 8
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Function user not found\\.$#"
+			count: 2
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Function user_id not found\\.$#"
+			count: 2
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AttendanceController\\:\\:clockIn\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AttendanceController\\:\\:clockOut\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AttendanceController\\:\\:storeClockIn\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AttendanceController\\:\\:storeClockOut\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Offset 0 on array\\<string, string\\> on left side of \\?\\? does not exist\\.$#"
+			count: 2
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Parameter \\#1 \\$datetime of function strtotime expects string, array\\<int\\|string, mixed\\>\\|bool\\|float\\|int\\|stdClass\\|string\\|null given\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Parameter \\#1 \\$datetime of function strtotime expects string, mixed given\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\AttendanceController\\:\\:\\$validator \\(CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\) does not accept App\\\\Validators\\\\AttendanceValidator\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceController.php
+
+		-
+			message: "#^Binary operation \"\\-\" between 'A7' and 1 results in an error\\.$#"
+			count: 3
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Binary operation \"\\-\" between non\\-falsy\\-string and 1 results in an error\\.$#"
+			count: 3
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Call to an undefined static method Config\\\\Services\\:\\:download\\(\\)\\.$#"
+			count: 3
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Cannot call method format\\(\\) on DateTime\\|false\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Function user not found\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AttendanceExportController\\:\\:exportDailyReportExcel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AttendanceExportController\\:\\:exportMonthlyReportExcel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AttendanceExportController\\:\\:exportRecapExcel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Parameter \\#2 \\$datetime of static method DateTime\\:\\:createFromFormat\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Part \\$filterMonth \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Part \\$filterYear \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\AttendanceExportController\\:\\:\\$attendanceModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\AttendanceExportController\\:\\:\\$attendanceService has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\AttendanceExportController\\:\\:\\$employeeModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceExportController.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Models\\\\LocationModel\\:\\:getWhere\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceReportController.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:getVar\\(\\)\\.$#"
+			count: 3
+			path: app/Http/Controllers/AttendanceReportController.php
+
+		-
+			message: "#^Function user_id not found\\.$#"
+			count: 3
+			path: app/Http/Controllers/AttendanceReportController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AttendanceReportController\\:\\:dailyReport\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceReportController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AttendanceReportController\\:\\:monthlyReport\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceReportController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AttendanceReportController\\:\\:recapEmployeeAttendance\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceReportController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\AttendanceReportController\\:\\:\\$attendanceModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceReportController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\AttendanceReportController\\:\\:\\$attendanceService has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AttendanceReportController.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:getUserAgent\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Cannot call method getErrors\\(\\) on CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\.$#"
+			count: 5
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Constant MINUTE not found\\.$#"
+			count: 2
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Function model not found\\.$#"
+			count: 5
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Function previous_url not found\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Function route_to not found\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AuthController\\:\\:attemptForgot\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AuthController\\:\\:attemptForgot\\(\\) has parameter \\$email with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AuthController\\:\\:attemptLogin\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AuthController\\:\\:attemptRegister\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AuthController\\:\\:forgotPassword\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AuthController\\:\\:login\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AuthController\\:\\:logout\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AuthController\\:\\:register\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AuthController\\:\\:render\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AuthController\\:\\:resendActivateAccount\\(\\) has parameter \\$login with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\AuthController\\:\\:resetPassword\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Parameter \\#1 \\$data of class Myth\\\\Auth\\\\Entities\\\\User constructor expects array\\<string, mixed\\>\\|null, mixed given\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\AuthController\\:\\:\\$auth has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Controllers\\\\BaseController\\:\\:\\$helpers is not covariant with PHPDoc type array\\<int, string\\> of overridden property CodeIgniter\\\\Controller\\:\\:\\$helpers\\.$#"
+			count: 1
+			path: app/Http/Controllers/BaseController.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Models\\\\LocationModel\\:\\:get\\(\\)\\.$#"
+			count: 3
+			path: app/Http/Controllers/EmployeeController.php
+
+		-
+			message: "#^Cannot call method validateCreate\\(\\) on CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeController.php
+
+		-
+			message: "#^Cannot call method validateUpdate\\(\\) on CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeController.php
+
+		-
+			message: "#^Function user_id not found\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\EmployeeController\\:\\:delete\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\EmployeeController\\:\\:store\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\EmployeeController\\:\\:update\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeController.php
+
+		-
+			message: "#^Offset 'employees' on array\\{employees\\: array, links\\: string, total\\: int, perPage\\: int, page\\: int\\} on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 2
+			path: app/Http/Controllers/EmployeeController.php
+
+		-
+			message: "#^Offset 'password' does not exist on array\\{success\\: true, message\\: string, password\\?\\: string\\}\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\EmployeeController\\:\\:\\$validator \\(CodeIgniter\\\\Validation\\\\ValidationInterface\\|null\\) does not accept App\\\\Validators\\\\EmployeeValidator\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\EmployeeExportController\\:\\:exportEmployeeData\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeExportController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\EmployeeExportController\\:\\:\\$employeeExportService has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeExportController.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:getFile\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeImportController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\EmployeeImportController\\:\\:downloadTemplate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeImportController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\EmployeeImportController\\:\\:importExcel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeImportController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\EmployeeImportController\\:\\:\\$employeeImportService has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeeImportController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\EmployeePhotoController\\:\\:deletePhoto\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeePhotoController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\EmployeePhotoController\\:\\:deletePhoto\\(\\) has parameter \\$username with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeePhotoController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\EmployeePhotoController\\:\\:\\$employeePhotoService has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/EmployeePhotoController.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Models\\\\LocationModel\\:\\:getWhere\\(\\)\\.$#"
+			count: 2
+			path: app/Http/Controllers/Home.php
+
+		-
+			message: "#^Function user_id not found\\.$#"
+			count: 2
+			path: app/Http/Controllers/Home.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\Home\\:\\:getTime\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Home.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\Home\\:\\:\\$absenceModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Home.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\Home\\:\\:\\$attendanceModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Home.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\Home\\:\\:\\$employeeModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/Home.php
+
+		-
+			message: "#^Binary operation \"\\.\" between '/locations/edit/' and array\\<int\\|string, mixed\\>\\|bool\\|float\\|int\\|stdClass\\|string\\|null results in an error\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Binary operation \"\\.\" between 'Location ' and array\\<int\\|string, mixed\\>\\|bool\\|float\\|int\\|stdClass\\|string\\|null results in an error\\.$#"
+			count: 2
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Models\\\\LocationModel\\:\\:getWhere\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:getVar\\(\\)\\.$#"
+			count: 27
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Function url_title not found\\.$#"
+			count: 2
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Function user_id not found\\.$#"
+			count: 4
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\LocationController\\:\\:delete\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\LocationController\\:\\:delete\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\LocationController\\:\\:detail\\(\\) has parameter \\$slug with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\LocationController\\:\\:edit\\(\\) has parameter \\$slug with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\LocationController\\:\\:search\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\LocationController\\:\\:store\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\LocationController\\:\\:update\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Variable \\$filter in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\LocationExportController\\:\\:exportLocationData\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationExportController.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\LocationExportController\\:\\:\\$locationExportService has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/LocationExportController.php
+
+		-
+			message: "#^Binary operation \"\\.\" between '/position/' and array\\<int\\|string, mixed\\>\\|bool\\|float\\|int\\|stdClass\\|string\\|null results in an error\\.$#"
+			count: 1
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Binary operation \"\\.\" between 'Position ' and array\\<int\\|string, mixed\\>\\|bool\\|float\\|int\\|stdClass\\|string\\|null results in an error\\.$#"
+			count: 2
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:getVar\\(\\)\\.$#"
+			count: 6
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Cannot cast array\\<int\\|string, mixed\\>\\|bool\\|float\\|int\\|stdClass\\|string to int\\.$#"
+			count: 2
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Cannot cast array\\<int\\|string, mixed\\>\\|bool\\|float\\|int\\|stdClass\\|string\\|null to int\\.$#"
+			count: 1
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Function user_id not found\\.$#"
+			count: 2
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\PositionController\\:\\:delete\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\PositionController\\:\\:store\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\PositionController\\:\\:update\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of method App\\\\Services\\\\PositionService\\:\\:createPosition\\(\\) expects string, array\\<int\\|string, mixed\\>\\|bool\\|float\\|int\\|stdClass\\|string\\|null given\\.$#"
+			count: 1
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Parameter \\#2 \\$keyword of method App\\\\Services\\\\PositionService\\:\\:getPositionsList\\(\\) expects string, mixed given\\.$#"
+			count: 2
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Parameter \\#2 \\$name of method App\\\\Services\\\\PositionService\\:\\:updatePosition\\(\\) expects string, array\\<int\\|string, mixed\\>\\|bool\\|float\\|int\\|stdClass\\|string\\|null given\\.$#"
+			count: 1
+			path: app/Http/Controllers/PositionController.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:getFile\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\HTTP\\\\CLIRequest\\|CodeIgniter\\\\HTTP\\\\IncomingRequest\\:\\:getVar\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Cannot call method getError\\(\\) on CodeIgniter\\\\HTTP\\\\Files\\\\UploadedFile\\|null\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Cannot call method move\\(\\) on CodeIgniter\\\\HTTP\\\\Files\\\\UploadedFile\\|null\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Function user not found\\.$#"
+			count: 3
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Function user_id not found\\.$#"
+			count: 6
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:attemptChangeEmail\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:changeEmail\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:deletePhoto\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:editProfile\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:emailToken\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:passwordToken\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:sendEmail\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:sendEmail\\(\\) has parameter \\$from with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:sendEmail\\(\\) has parameter \\$subject with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:sendEmail\\(\\) has parameter \\$to with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:sendEmail\\(\\) has parameter \\$variables with no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Method App\\\\Controllers\\\\UserProfile\\:\\:update\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\UserProfile\\:\\:\\$auth has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\UserProfile\\:\\:\\$defaultPhoto has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\UserProfile\\:\\:\\$email has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\UserProfile\\:\\:\\$emailTokenModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\UserProfile\\:\\:\\$employeeModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Property App\\\\Controllers\\\\UserProfile\\:\\:\\$myEmail has no type specified\\.$#"
+			count: 1
+			path: app/Http/Controllers/UserProfile.php
+
+		-
+			message: "#^Access to an undefined property CodeIgniter\\\\HTTP\\\\RequestInterface\\:\\:\\$user\\.$#"
+			count: 1
+			path: app/Http/Filters/ApiKeyFilter.php
+
+		-
+			message: "#^Method App\\\\Filters\\\\ApiKeyFilter\\:\\:after\\(\\) should return CodeIgniter\\\\HTTP\\\\ResponseInterface\\|null but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Filters/ApiKeyFilter.php
+
+		-
+			message: "#^Method App\\\\Filters\\\\ApiKeyFilter\\:\\:before\\(\\) should return CodeIgniter\\\\HTTP\\\\RequestInterface\\|CodeIgniter\\\\HTTP\\\\ResponseInterface\\|string\\|null but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Filters/ApiKeyFilter.php
+
+		-
+			message: "#^Property App\\\\Filters\\\\ApiKeyFilter\\:\\:\\$usersModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Filters/ApiKeyFilter.php
+
+		-
+			message: "#^Method App\\\\Filters\\\\ApiRateLimitFilter\\:\\:after\\(\\) should return CodeIgniter\\\\HTTP\\\\ResponseInterface\\|null but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Filters/ApiRateLimitFilter.php
+
+		-
+			message: "#^Method App\\\\Filters\\\\ApiRateLimitFilter\\:\\:before\\(\\) should return CodeIgniter\\\\HTTP\\\\RequestInterface\\|CodeIgniter\\\\HTTP\\\\ResponseInterface\\|string\\|null but empty return statement found\\.$#"
+			count: 1
+			path: app/Http/Filters/ApiRateLimitFilter.php
+
+		-
+			message: "#^Method App\\\\Filters\\\\ApiRateLimitFilter\\:\\:before\\(\\) should return CodeIgniter\\\\HTTP\\\\RequestInterface\\|CodeIgniter\\\\HTTP\\\\ResponseInterface\\|string\\|null but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Filters/ApiRateLimitFilter.php
+
+		-
+			message: "#^Method App\\\\Filters\\\\CsrfFilter\\:\\:before\\(\\) should return CodeIgniter\\\\HTTP\\\\RequestInterface\\|CodeIgniter\\\\HTTP\\\\ResponseInterface\\|string\\|null but empty return statement found\\.$#"
+			count: 2
+			path: app/Http/Filters/CsrfFilter.php
+
+		-
+			message: "#^Property App\\\\Filters\\\\CsrfFilter\\:\\:\\$filter has no type specified\\.$#"
+			count: 1
+			path: app/Http/Filters/CsrfFilter.php
+
+		-
+			message: "#^Function route_to not found\\.$#"
+			count: 1
+			path: app/Http/Filters/LoginFilter.php
+
+		-
+			message: "#^Function url_is not found\\.$#"
+			count: 1
+			path: app/Http/Filters/LoginFilter.php
+
+		-
+			message: "#^Return type \\(void\\) of method App\\\\Filters\\\\LoginFilter\\:\\:after\\(\\) should be compatible with return type \\(CodeIgniter\\\\HTTP\\\\ResponseInterface\\|null\\) of method CodeIgniter\\\\Filters\\\\FilterInterface\\:\\:after\\(\\)$#"
+			count: 1
+			path: app/Http/Filters/LoginFilter.php
+
+		-
+			message: "#^Constant MINUTE not found\\.$#"
+			count: 1
+			path: app/Http/Filters/LoginThrottle.php
+
+		-
+			message: "#^Method App\\\\Filters\\\\LoginThrottle\\:\\:after\\(\\) should return CodeIgniter\\\\HTTP\\\\ResponseInterface\\|null but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Filters/LoginThrottle.php
+
+		-
+			message: "#^Method App\\\\Filters\\\\LoginThrottle\\:\\:before\\(\\) should return CodeIgniter\\\\HTTP\\\\RequestInterface\\|CodeIgniter\\\\HTTP\\\\ResponseInterface\\|string\\|null but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Filters/LoginThrottle.php
+
+		-
+			message: "#^Function route_to not found\\.$#"
+			count: 1
+			path: app/Http/Filters/PermissionFilter.php
+
+		-
+			message: "#^Return type \\(void\\) of method App\\\\Filters\\\\PermissionFilter\\:\\:after\\(\\) should be compatible with return type \\(CodeIgniter\\\\HTTP\\\\ResponseInterface\\|null\\) of method CodeIgniter\\\\Filters\\\\FilterInterface\\:\\:after\\(\\)$#"
+			count: 1
+			path: app/Http/Filters/PermissionFilter.php
+
+		-
+			message: "#^Function route_to not found\\.$#"
+			count: 1
+			path: app/Http/Filters/RoleFilter.php
+
+		-
+			message: "#^Return type \\(void\\) of method App\\\\Filters\\\\RoleFilter\\:\\:after\\(\\) should be compatible with return type \\(CodeIgniter\\\\HTTP\\\\ResponseInterface\\|null\\) of method CodeIgniter\\\\Filters\\\\FilterInterface\\:\\:after\\(\\)$#"
+			count: 1
+			path: app/Http/Filters/RoleFilter.php
+
+		-
+			message: "#^Variable \\$arguments in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: app/Http/Filters/RoleFilter.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Models\\\\LocationModel\\:\\:getWhere\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Filters/TimezoneFilter.php
+
+		-
+			message: "#^Method App\\\\Filters\\\\TimezoneFilter\\:\\:after\\(\\) should return CodeIgniter\\\\HTTP\\\\ResponseInterface\\|null but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Filters/TimezoneFilter.php
+
+		-
+			message: "#^Method App\\\\Filters\\\\TimezoneFilter\\:\\:before\\(\\) should return CodeIgniter\\\\HTTP\\\\RequestInterface\\|CodeIgniter\\\\HTTP\\\\ResponseInterface\\|string\\|null but empty return statement found\\.$#"
+			count: 3
+			path: app/Http/Filters/TimezoneFilter.php
+
+		-
+			message: "#^Method App\\\\Filters\\\\TimezoneFilter\\:\\:before\\(\\) should return CodeIgniter\\\\HTTP\\\\RequestInterface\\|CodeIgniter\\\\HTTP\\\\ResponseInterface\\|string\\|null but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Filters/TimezoneFilter.php
+
+		-
+			message: "#^Property App\\\\Filters\\\\TimezoneFilter\\:\\:\\$cache has no type specified\\.$#"
+			count: 1
+			path: app/Http/Filters/TimezoneFilter.php
+
+		-
+			message: "#^Property App\\\\Filters\\\\TimezoneFilter\\:\\:\\$locationModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Filters/TimezoneFilter.php
+
+		-
+			message: "#^Property App\\\\Filters\\\\TimezoneFilter\\:\\:\\$usersModel has no type specified\\.$#"
+			count: 1
+			path: app/Http/Filters/TimezoneFilter.php
+
+		-
+			message: "#^Parameter \\#1 \\$nodes of method Twig\\\\Node\\\\Node\\:\\:__construct\\(\\) expects array\\<int\\|string, Twig\\\\Node\\\\Node\\>, array\\<string, Twig\\\\Node\\\\Expression\\\\Expression\\> given\\.$#"
+			count: 1
+			path: app/Libraries/TwigHtmx/TwigView.php
+
+		-
+			message: "#^Parameter \\#2 \\$callable of class Twig\\\\TwigFunction constructor expects array\\{class\\-string, string\\}\\|\\(callable\\(\\)\\: mixed\\)\\|null, 'csrf_hash' given\\.$#"
+			count: 1
+			path: app/Libraries/TwigHtmx/TwigView.php
+
+		-
+			message: "#^Parameter \\#2 \\$callable of class Twig\\\\TwigFunction constructor expects array\\{class\\-string, string\\}\\|\\(callable\\(\\)\\: mixed\\)\\|null, 'csrf_token' given\\.$#"
+			count: 1
+			path: app/Libraries/TwigHtmx/TwigView.php
+
+		-
+			message: "#^Parameter \\#2 \\$data of method App\\\\Libraries\\\\TwigHtmx\\\\TwigView\\:\\:fragment\\(\\) expects array, mixed given\\.$#"
+			count: 1
+			path: app/Libraries/TwigHtmx/TwigView.php
+
+		-
+			message: "#^Parameter \\$props of method App\\\\Libraries\\\\TwigHtmx\\\\ComponentNode\\:\\:__construct\\(\\) has invalid type Twig\\\\Node\\\\Expression\\\\Expression\\.$#"
+			count: 1
+			path: app/Libraries/TwigHtmx/TwigView.php
+
+		-
+			message: "#^Accessing offset 'page' directly on \\$_GET is discouraged\\.$#"
+			count: 2
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Accessing offset 'page_absences' directly on \\$_GET is discouraged\\.$#"
+			count: 2
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\Database\\\\BaseBuilder\\:\\:ilike\\(\\)\\.$#"
+			count: 2
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot call method countAllResults\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 3
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot call method getNumRows\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 2
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot call method getResult\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 2
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot call method getRow\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 2
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot call method groupStart\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 6
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot call method join\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 2
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot call method orderBy\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 2
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot call method select\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 4
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot call method update\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot call method where\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 12
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Cannot clone CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:checkAndUpdateStatus\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:findAbsence\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:findAbsence\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getAbsences\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getAbsences\\(\\) has parameter \\$employeeId with no type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getAbsences\\(\\) has parameter \\$filter with no type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getAbsences\\(\\) has parameter \\$perPage with no type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getAbsences\\(\\) has parameter \\$print with no type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getActiveAbsences\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getActiveAbsences\\(\\) has parameter \\$employeeId with no type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getActiveAbsences\\(\\) has parameter \\$endDate with no type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getActiveAbsences\\(\\) has parameter \\$startDate with no type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getApprovedAbsenceForDate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getApprovedAbsenceForDate\\(\\) has parameter \\$employeeId with no type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getApprovedAbsenceForDate\\(\\) has parameter \\$endDate with no type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getApprovedAbsenceForDate\\(\\) has parameter \\$startDate with no type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AbsenceModel\\:\\:getMinYear\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AbsenceModel.php
+
+		-
+			message: "#^Accessing offset 'page_daily' directly on \\$_GET is discouraged\\.$#"
+			count: 2
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Accessing offset 'page_monthly' directly on \\$_GET is discouraged\\.$#"
+			count: 2
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Accessing offset 'page_recap' directly on \\$_GET is discouraged\\.$#"
+			count: 2
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Models\\\\AttendanceModel\\:\\:getWhere\\(\\)\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Cannot call method countAllResults\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 2
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Cannot call method getNumRows\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Cannot call method getResult\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 6
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Cannot call method getRow\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 2
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Cannot call method join\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 2
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Cannot call method orderBy\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Cannot call method select\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Cannot call method where\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 3
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Cannot clone CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:checkClockIn\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:checkClockIn\\(\\) has parameter \\$count with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:checkClockIn\\(\\) has parameter \\$employeeId with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:checkClockIn\\(\\) has parameter \\$todayDate with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendance\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendance\\(\\) has parameter \\$dateFrom with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendance\\(\\) has parameter \\$dateTo with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendance\\(\\) has parameter \\$employeeId with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendance\\(\\) has parameter \\$perPage with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendance\\(\\) has parameter \\$print with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendanceDaily\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendanceDaily\\(\\) has parameter \\$dateFrom with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendanceDaily\\(\\) has parameter \\$dateTo with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendanceDaily\\(\\) has parameter \\$perPage with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendanceDaily\\(\\) has parameter \\$print with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendanceMonthly\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendanceMonthly\\(\\) has parameter \\$filterMonth with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendanceMonthly\\(\\) has parameter \\$filterYear with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendanceMonthly\\(\\) has parameter \\$perPage with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getDataAttendanceMonthly\\(\\) has parameter \\$print with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getMinDate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getMinDate\\(\\) has parameter \\$employeeId with no type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getMinYear\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\AttendanceModel\\:\\:getTodayAttendanceCount\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/AttendanceModel.php
+
+		-
+			message: "#^Cannot call method getRow\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 1
+			path: app/Models/ClassStudentModel.php
+
+		-
+			message: "#^Cannot call method select\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/ClassStudentModel.php
+
+		-
+			message: "#^Cannot call method where\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/ClassStudentModel.php
+
+		-
+			message: "#^Accessing offset 'page_employees' directly on \\$_GET is discouraged\\.$#"
+			count: 2
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\Database\\\\BaseBuilder\\:\\:ilike\\(\\)\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot access property \\$latest_nip on stdClass\\|null\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot call method countAllResults\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 2
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot call method getNumRows\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot call method getResult\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 2
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot call method getRow\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 2
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot call method groupStart\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot call method join\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 8
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot call method orderBy\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot call method select\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot call method where\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 7
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Cannot clone CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 2
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\EmployeeModel\\:\\:getActiveEmployeeCount\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\EmployeeModel\\:\\:getEmployees\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\EmployeeModel\\:\\:getEmployees\\(\\) has parameter \\$filter with no type specified\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\EmployeeModel\\:\\:getEmployees\\(\\) has parameter \\$perPage with no type specified\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\EmployeeModel\\:\\:getEmployees\\(\\) has parameter \\$print with no type specified\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\EmployeeModel\\:\\:getEmployees\\(\\) has parameter \\$username with no type specified\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\EmployeeModel\\:\\:getLastNip\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/EmployeeModel.php
+
+		-
+			message: "#^Accessing offset 'page_locations' directly on \\$_GET is discouraged\\.$#"
+			count: 2
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Call to an undefined method CodeIgniter\\\\Database\\\\BaseBuilder\\:\\:ilike\\(\\)\\.$#"
+			count: 1
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Cannot call method countAllResults\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 2
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Cannot call method getResult\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 2
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Cannot call method getRowArray\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 1
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Cannot call method groupStart\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Cannot call method orderBy\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Cannot call method where\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 4
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Cannot clone CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 2
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\LocationModel\\:\\:getLocations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\LocationModel\\:\\:getLocations\\(\\) has parameter \\$filter with no type specified\\.$#"
+			count: 1
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\LocationModel\\:\\:getLocations\\(\\) has parameter \\$perPage with no type specified\\.$#"
+			count: 1
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\LocationModel\\:\\:getLocations\\(\\) has parameter \\$print with no type specified\\.$#"
+			count: 1
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\LocationModel\\:\\:getLocations\\(\\) has parameter \\$slug with no type specified\\.$#"
+			count: 1
+			path: app/Models/LocationModel.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\PositionModel\\:\\:\\$request\\.$#"
+			count: 1
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Accessing offset 'page_position' directly on \\$_GET is discouraged\\.$#"
+			count: 1
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot call method countAllResults\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot call method getResultArray\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 1
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot call method getRowArray\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 1
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot call method groupBy\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot call method ilike\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 2
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot call method join\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot call method orderBy\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot call method select\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 1
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot call method where\\(\\) on CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 2
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot clone CodeIgniter\\\\Database\\\\BaseBuilder\\|null\\.$#"
+			count: 3
+			path: app/Models/PositionModel.php
+
+		-
+			message: "#^Cannot call method getRow\\(\\) on CodeIgniter\\\\Database\\\\ResultInterface\\|false\\.$#"
+			count: 1
+			path: app/Models/UserModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserModel\\:\\:getUserInfo\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/UserModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserModel\\:\\:getUserInfo\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/Models/UserModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserModel\\:\\:hashPassword\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/UserModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserModel\\:\\:hashPassword\\(\\) has parameter \\$passwordString with no type specified\\.$#"
+			count: 1
+			path: app/Models/UserModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserRoleModel\\:\\:getUserRole\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: app/Models/UserRoleModel.php
+
+		-
+			message: "#^Method App\\\\Models\\\\UserRoleModel\\:\\:getUserRole\\(\\) has parameter \\$userId with no type specified\\.$#"
+			count: 1
+			path: app/Models/UserRoleModel.php
+
+		-
+			message: "#^Method App\\\\Libraries\\\\Validation\\\\MyCustomValidation\\:\\:daysAfter\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: app/Support/Libraries/Validation/myCustomValidation.php
+
+		-
+			message: "#^Method App\\\\Libraries\\\\Validation\\\\MyCustomValidation\\:\\:offLimitRule\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: app/Support/Libraries/Validation/myCustomValidation.php
+
+		-
+			message: "#^Method App\\\\Libraries\\\\Validation\\\\MyCustomValidation\\:\\:validTimezone\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: app/Support/Libraries/Validation/myCustomValidation.php

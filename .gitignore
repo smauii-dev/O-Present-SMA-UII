@@ -42,6 +42,8 @@ $RECYCLE.BIN/
 # These should never be under version control,
 # as it poses a security risk.
 .env
+.env.*
+!.env.example
 .vagrant
 Vagrantfile
 
@@ -132,3 +134,31 @@ nb-configuration.xml
 !/public/assets/img/foto_presensi/masuk/.gitkeep
 /public/assets/img/foto_presensi/keluar/*
 !/public/assets/img/foto_presensi/keluar/.gitkeep
+# Frontend build deps
+node_modules/
+public/build/
+# Public generated assets (dynamic uploads)
+public/assets/file/*
+!public/assets/file/.gitkeep
+# Tooling caches / local editor config
+#-------------------------
+.php-cs-fixer.cache
+.phpactor.json
+
+# Absence request documents (uploaded at runtime)
+/public/assets/file/absence-documents/*
+!/public/assets/file/absence-documents/.gitkeep
+
+#-------------------------
+# Generated / Runtime Artifacts
+#-------------------------
+.understand-anything/
+screenshot/
+check_lokasi.php
+*.log
+
+# Husky internal
+.husky/_/
+
+# Public JS (compiled/vendor)
+public/js/

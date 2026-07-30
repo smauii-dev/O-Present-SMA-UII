@@ -1,0 +1,38 @@
+{% extends 'layouts/app.twig' %}
+{% block content %}
+<div>
+  <div class="page-toolbar">
+    <div class="page-toolbar-meta">
+      <p>Review pengajuan ketidakhadiran pegawai</p>
+    </div>
+  </div>
+
+  <form id="filter-form"
+        class="page-filter-bar"
+        hx-get="/admin/absence/admin/fragment"
+        hx-target="#admin-ketidakhadiran-list"
+        hx-trigger="change from:select, submit">
+    <div class="page-filter-field">
+      <label for="filter-status">Status</label>
+      <select id="filter-status" name="status">
+        <option value="">Semua</option>
+        <option value="PENDING">Pending</option>
+        <option value="APPROVED">Disetujui</option>
+        <option value="REJECTED">Ditolak</option>
+      </select>
+    </div>
+  </form>
+
+  <div id="admin-kh-loading" class="htmx-indicator flex items-center justify-center py-12 text-sm text-gray-500">
+      <svg class="mr-2 h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+      Memuat data...
+    </div>
+
+  <div id="admin-ketidakhadiran-list"
+       hx-get="/admin/absence/admin/fragment"
+       hx-trigger="revealed, reloadKetidakhadiranTable from:body"
+       hx-include="#filter-form"
+       hx-indicator="#admin-kh-loading">
+  </div>
+</div>
+{% endblock %}

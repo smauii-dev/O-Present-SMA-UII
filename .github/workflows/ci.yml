@@ -1,0 +1,146 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  COMPOSER_NO_INTERACTION: 1
+  COMPOSER_ALLOW_SUPERUSER: 1
+
+jobs:
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: intl, sqlite3, mbstring, json, curl, xml, pdo, pdo_sqlite
+          ini-values: post_max_size=256M, upload_max_filesize=256M
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-scripts
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --memory-limit=512M
+
+      - name: Run PHP CS Fixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+  tests:
+    name: Unit & Feature Tests
+    runs-on: ubuntu-latest
+    services:
+      # SQLite is used in-memory for tests, no external DB needed
+      # If PostgreSQL tests are needed later, add postgres service here
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: intl, sqlite3, mbstring, json, curl, xml, pdo, pdo_sqlite
+          ini-values: post_max_size=256M, upload_max_filesize=256M
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-scripts
+
+      - name: Prepare test environment
+        run: |
+          mkdir -p writable/cache writable/logs writable/session writable/uploads
+          chmod -R 777 writable
+
+      - name: Run Unit & Feature Tests
+        run: vendor/bin/phpunit --no-coverage
+        env:
+          CI_ENVIRONMENT: testing
+
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: intl, sqlite3, mbstring, json, curl, xml, pdo, pdo_sqlite
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Check for syntax errors
+        run: find app -name "*.php" -exec php -l {} \;
+
+      - name: Check for TODO/FIXME comments
+        run: |
+          grep -r "TODO\|FIXME" --include="*.php" app/ || true
+          echo "Review the above comments before merging."
+
+  frontend-lint:
+    name: Frontend Lint & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Biome check (lint + format)
+        run: bun run lint
+
+      - name: TypeScript typecheck
+        run: bun run typecheck
+
+      - name: Build frontend
+        run: bun run build
+
+  deploy:
+    name: Deploy to Production
+    needs: [static-analysis, tests, code-quality, frontend-lint]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Koneksi Cloud
+        run: |
+          ssh -o StrictHostKeyChecking=no dev@${{ secrets.SERVER_HOST }} << 'EOF'
+            cd /home/dev/web/instances/smauii/services/O-Present-SMA-UII
+            git pull origin main
+            composer install --no-dev --optimize-autoloader --no-interaction
+            php spark migrate --all --force
+            php spark cache:clear
+            # If using Docker
+            # docker compose down && docker compose up -d --build
+          EOF
+
+      - name: Verify Deployment
+        run: |
+          curl -f https://presensi.smauiiyk.sch.id/health || exit 1
