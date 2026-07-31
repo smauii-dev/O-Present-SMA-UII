@@ -4,7 +4,9 @@ Proyek O-Present-SMA UII tidak dibangun menggunakan gaya konvensional *Fat Contr
 
 Dokumen ini adalah *Single Source of Truth* untuk semua *developer* yang akan berkontribusi pada *codebase* ini.
 
----
+> 📚 **Referensi terkait**: [Architecture](docs/architecture.md) • [Local Development](docs/LOCAL_DEVELOPMENT.md) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md) • [Performance Analysis](docs/PERFORMANCE_ANALYSIS.md) • [Testing Guide](docs/TESTING_GUIDE.md) • [Contributing](CONTRIBUTING.md)
+
+> 📚 **Referensi terkait**: [Architecture](docs/architecture.md) • [Local Development](docs/LOCAL_DEVELOPMENT.md) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md) • [Testing Guide](docs/TESTING_GUIDE.md) • [Contributing](CONTRIBUTING.md)
 
 ## 1. Clean Architecture di CodeIgniter 4
 

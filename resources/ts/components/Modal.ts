@@ -150,11 +150,9 @@ export default Modal;
  * Uses a named wrapper so accidental `Alpine.data('modal')` without args
  * is less likely during debugging, and re-registration is idempotent.
  */
-// biome-ignore lint/suspicious/noExplicitAny: Alpine does not provide global types here
-export function registerModalComponent(Alpine: any): void {
-  // eslint-disable-line @typescript-eslint/no-explicit-any
+export function registerModalComponent(Alpine: typeof import("alpinejs").default): void {
   const factory = (options: ModalOptions = {}) => Modal(options);
-  Alpine.data("modal", factory);
+  Alpine.data("modal", factory as (...args: unknown[]) => Record<string, unknown>);
   // Expose for re-register / debugging without wiping the factory
   if (typeof window !== "undefined") {
     (window as Window & { __alpineModalFactory?: typeof factory }).__alpineModalFactory = factory;

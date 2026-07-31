@@ -4,6 +4,8 @@
 
 Aplikasi presensi online berbasis web untuk **SMA UII Yogyakarta** — mencatat kehadiran via foto selfie + GPS, dengan manajemen data pegawai, lokasi presensi, laporan harian/bulanan, dan pengajuan ketidakhadiran.
 
+📚 **Documentation**: [Architecture](docs/architecture.md) • [Local Development](docs/LOCAL_DEVELOPMENT.md) • [Architecture & Naming](docs/ARCHITECTURE_AND_NAMING_PLAN.md) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md) • [Tech Stack Knowledge Base](docs/TECH_STACK_KNOWLEDGE_BASE.md) • [Performance Analysis](docs/PERFORMANCE_ANALYSIS.md) • [Testing Guide](docs/TESTING_GUIDE.md) • [Contributing](CONTRIBUTING.md)
+
 ---
 
 ## Asal-usul & Sejarah
@@ -107,7 +109,7 @@ app/
 *   **Language**: TypeScript 5.5+ (Strict mode, `noEmit: true` untuk type-check only, Vite handle transpile)
 *   **Runtime**: Alpine.js 3.14+ (global `Alpine` + component registration via `Alpine.data()`)
 *   **Partial Updates**: HTMX 2.0+ (hx-get, hx-post, hx-swap, hx-trigger, hx-indicator, hx-target, HX-Trigger response headers)
-*   **Validation**: [Zod 3.23+](https://zod.dev/) — schema-first, shared types via `z.infer<>`, client-side validate + server re-validate
+*   **Validation**: [Zod 4.4+](https://zod.dev/) — schema-first, shared types via `z.infer<>`, client-side validate + server re-validate
 *   **CSS Framework**: [Tailwind CSS v4](https://tailwindcss.com/) (native CSS cascade, `@import "tailwindcss"`, `@theme` config, JIT compiler via Vite plugin)
 *   **Icons**: [Tabler Icons](https://tabler.io/icons) (inline SVG, zero-runtime)
 *   **Date/Time**: Native `Intl.DateTimeFormat` (locale `id-ID`) + helper `formatDate`, `formatTime` di `window`

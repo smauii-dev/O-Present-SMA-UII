@@ -2,6 +2,8 @@
 
 Dokumen ini berisi rangkuman keputusan arsitektural dan teknologi (ADR - *Architecture Decision Records*) yang menjelaskan **mengapa** kami memilih teknologi spesifik dalam *stack* proyek O-Present-SMA UII, serta pertimbangan teknis di baliknya.
 
+> 📚 **Referensi terkait**: [Architecture](docs/architecture.md) • [Local Development](docs/LOCAL_DEVELOPMENT.md) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md) • [Performance Analysis](docs/PERFORMANCE_ANALYSIS.md) • [Testing Guide](docs/TESTING_GUIDE.md) • [Contributing](CONTRIBUTING.md)
+
 ---
 
 ## 1. Backend Framework: CodeIgniter 4 (PHP 8.3)

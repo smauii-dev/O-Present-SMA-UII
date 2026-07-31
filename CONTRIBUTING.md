@@ -2,6 +2,8 @@
 
 Terima kasih atas minat Anda untuk berkontribusi pada proyek **O-Present-SMA UII**. Panduan ini akan membantu Anda memahami proses kontribusi, mulai dari pelaporan bug hingga pengajuan *Pull Request* (PR).
 
+> 📚 **Referensi terkait**: [Architecture](docs/architecture.md) • [Local Development](docs/LOCAL_DEVELOPMENT.md) • [Architecture & Naming](docs/ARCHITECTURE_AND_NAMING_PLAN.md) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md) • [Testing Guide](docs/TESTING_GUIDE.md)
+
 ---
 
 ## 1. Kode Etik

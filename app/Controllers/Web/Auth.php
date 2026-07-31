@@ -69,18 +69,27 @@ return redirect()->to('/overview');
             return redirect()->back()->withInput()->with('error', 'Username/Email atau password salah');
         }
 
+        // Preserve intended destination — Myth\Auth login() regenerates the session ID.
+        $redirectUrl = session('redirect_url') ?: '/overview';
+        session()->remove('redirect_url');
+
         $authenticate = service('authentication');
         $authenticate->login($user);
 
-        // Force session to write before redirect
+        // Ensure session (logged_in) is flushed before the redirect response leaves.
         session()->close();
 
+        // Only allow same-origin relative paths (open-redirect guard).
+        if (! is_string($redirectUrl) || $redirectUrl === '' || str_starts_with($redirectUrl, '//') || str_contains($redirectUrl, '://')) {
+            $redirectUrl = '/overview';
+        }
+
         if ($this->request->hasHeader('HX-Request')) {
-            $this->response->setHeader('HX-Redirect', '/');
+            $this->response->setHeader('HX-Redirect', $redirectUrl);
             return $this->response;
         }
 
-        return redirect()->to('/');
+        return redirect()->to($redirectUrl);
     }
 
     public function forgotAction()

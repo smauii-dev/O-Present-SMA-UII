@@ -2,6 +2,8 @@
 
 Proyek O-Present mengedepankan kualitas dan keandalan kode. Dokumen ini menjelaskan bagaimana suite pengujian kami disusun, dikonfigurasi, dan bagaimana Anda dapat berkontribusi di dalamnya.
 
+> 📚 **Referensi terkait**: [Architecture](docs/architecture.md) • [Local Development](docs/LOCAL_DEVELOPMENT.md) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md) • [Contributing](CONTRIBUTING.md)
+
 ---
 
 ## 1. Jenis-jenis Pengujian

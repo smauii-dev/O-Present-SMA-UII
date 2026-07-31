@@ -5,7 +5,7 @@
 **Last Updated:** 26 Juli 2026  
 **Audience:** Ahmad Hanif (Full-stack Developer)
 
----
+> 📚 **Referensi terkait**: [Architecture](docs/architecture.md) • [Local Development](docs/LOCAL_DEVELOPMENT.md) • [Architecture & Naming](docs/ARCHITECTURE_AND_NAMING_PLAN.md) • [Performance Analysis](docs/PERFORMANCE_ANALYSIS.md) • [Testing Guide](docs/TESTING_GUIDE.md) • [Contributing](CONTRIBUTING.md)
 
 ## 1. Backend Stack
 

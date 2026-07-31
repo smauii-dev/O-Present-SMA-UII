@@ -6,7 +6,7 @@ hingga lingkungan Docker development dan production. Ditulis agar seluruh tim
 memahami mengapa setiap keputusan diambil dan bagaimana semuanya saling
 terhubung.
 
----
+> 📚 **Referensi terkait**: [Local Development](docs/LOCAL_DEVELOPMENT.md) • [Architecture & Naming](docs/ARCHITECTURE_AND_NAMING_PLAN.md) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md) • [Performance Analysis](docs/PERFORMANCE_ANALYSIS.md) • [Testing Guide](docs/TESTING_GUIDE.md) • [Contributing](CONTRIBUTING.md)
 
 ## Daftar Isi
 
@@ -217,9 +217,9 @@ $this->twig->addFunctions([
 4. Return `"/assets/main-C2G8oTBe.js"` (diprefiks `/`, TANPA `/build/`)
 
 ### 4.3 Penggunaan di Template
-
+ 
 File: `app/Views/layouts/base.twig`
-
+ 
 ```twig
 <head>
   <link rel="icon" href="/assets/logo.png" type="image/png">
@@ -228,19 +228,21 @@ File: `app/Views/layouts/base.twig`
   <script type="module" src="{{ vite('main.ts') }}"></script>  {# → /assets/main-<hash>.js #}
 </head>
 ```
-
+ 
 **Penting:**
 - `|raw` diperlukan karena `vite_css()` mengembalikan HTML tag, bukan plain text
 - JANGAN duplicate `vite_css()` di child layouts — `base.twig` sudah menyediakannya
 - Child layouts hanya boleh menambahkan CSS/JS tambahan via `{% block head %}`
-
+ 
 ### 4.4 Manifest Fallback
-
+ 
 Jika `manifest.json` tidak ada (belum build), helper mengembalikan path default:
 - `vite()` → `'/assets/' . $entry` (misal: `/assets/main.ts` — tidak hashed)
 - `vite_css()` → `''` (kosong — tidak ada CSS link)
-
+ 
 Ini memungkinkan aplikasi tetap jalan meskipun aset belum di-build.
+ 
+> 📖 **Detail frontend**: [Tech Stack & DX](docs/TECH_STACK_AND_DX.md#2-frontend-stack) • [Architecture](docs/architecture.md#4-integrasi-vite--twig-php)
 
 ---
 
@@ -265,31 +267,33 @@ File: `public/.htaccess`
 ```
 
 ### 5.1 Mengapa Rewrite?
-
+ 
 ```
 Browser request:    GET /assets/main-C2G8oTBe.js
-                          │
+                           │
 Apache .htaccess:   RewriteRule ^assets/(.+)$ build/assets/$1 [L]
-                          │
+                           │
 File system:        public/build/assets/main-C2G8oTBe.js  ← yang sebenarnya
 ```
-
+ 
 **URL bersih** (`/assets/...`) dipisah dari **lokasi file** (`public/build/assets/...`).
-
+ 
 ### 5.2 Mengapa Bukan Symlink?
-
+ 
 - **Simpel:** rewrite rule 3 baris, tidak perlu symlink management
 - **Atomic:** file baru langsung tersedia, tidak perlu update symlink
 - **Portable:** bekerja di semua environment tanpa script tambahan
-
+ 
 ### 5.3 Pengecekan
-
+ 
 Rewrite hanya aktif jika file benar ada di `build/assets/`:
 ```apache
 RewriteCond %{DOCUMENT_ROOT}/build/assets/$1 -f
 ```
-
+ 
 Jika file tidak ada, request jatuh ke CI4 routing → 404.
+ 
+> 📖 **Detail frontend**: [Tech Stack & DX](docs/TECH_STACK_AND_DX.md#2-frontend-stack) • [Architecture](docs/architecture.md#3-pipeline-aset-vite)
 
 ---
 
@@ -330,27 +334,29 @@ app/Views/errors/
 ```
 
 ### 6.4 Twig Cache
-
+ 
 File: `app/Config/Twig.php`
-
+ 
 ```php
 public bool $cache = (ENVIRONMENT === 'production');
 public string $cacheDir = WRITEPATH . 'twig';
 ```
-
+ 
 - **Development:** cache dimatikan (auto-reload template)
 - **Production:** cache diaktifkan (performa)
 - **Setelah deploy:** hapus `writable/twig/*` jika template berubah
-
+ 
 **PENTING — Dua direktori cache berbeda:**
-
+ 
 | Direktori | Isi | Kapan dihapus |
 |-----------|-----|---------------|
 | `writable/cache/` | CI4 system cache (routing, config, hooks) | Saat ada perubahan config/routes |
 | `writable/twig/` | Compiled Twig templates (PHP) | **Setiap kali template `.twig` berubah** |
-
+ 
 Kesalahan umum: menghapus `writable/cache/` saat yang perlu dihapus adalah
 `writable/twig/`. Kedua direktori ini terpisah dan memiliki isi yang berbeda.
+ 
+> 📖 **Detail troubleshooting**: [Troubleshooting](docs/architecture.md#135-twig-template-tidak-update-di-production-template-lama-masih-ditampilkan) • [Local Development](docs/LOCAL_DEVELOPMENT.md#4-alur-kerja-workflow--caveats)
 
 ---
 
@@ -366,7 +372,7 @@ Kesalahan umum: menghapus `writable/cache/` saat yang perlu dihapus adalah
 **Semua file `.env*` di-gitignore** — tidak ada secrets yang di-commit.
 
 ### 7.2 Perbedaan Konfigurasi
-
+ 
 | Aspek | Development | Production |
 |-------|-------------|------------|
 | `CI_ENVIRONMENT` | `development` | `production` |
@@ -377,6 +383,8 @@ Kesalahan umum: menghapus `writable/cache/` saat yang perlu dihapus adalah
 | Twig cache | Disabled | Enabled |
 | PHP error display | Enabled | Disabled |
 | Log threshold | 9 (verbose) | 1 (errors only) |
+ 
+> 📖 **Detail environment**: [Local Development](docs/LOCAL_DEVELOPMENT.md#2-alur-instalasi-lokal) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md#7-environment-configuration)
 
 ---
 
@@ -501,6 +509,8 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 - `a2enmod rewrite` — diperlukan untuk `.htaccess` rewrite
 - `AllowOverride All` — di-set via sed agar Apache membaca `.htaccess`
 - `COPY . /var/www/html/` — hanya source code, `public/build/` belum ada
+ 
+> 📖 **Detail Docker**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#10-production-workflow) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md#3-infrastructure--deployment)
 
 ### 8.4 Entrypoint
 
@@ -540,80 +550,94 @@ exec apache2-foreground
 - **Prod (COPY):** direktori tidak ada → selalu build saat startup
 - `--frozen-lockfile` — gunakan `bun.lock` yang sudah ada, gagal jika tidak cocok
 - Fallback: `|| bun install` — jika lockfile tidak ada/invalid
+ 
+> 📖 **Detail entrypoint**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#10-production-workflow)
 
 ---
 
 ## 9. Development Workflow
 
+## 9. Development Workflow
+ 
 ### 9.1 Setup Awal
-
+ 
 ```bash
 # Clone repository
 git clone <repo-url>
 cd O-Present-SMA-UII-ori
-
+ 
 # Build + start containers
 docker compose -f docker/docker-compose.dev.yml up -d --build
-
+ 
 # Tunggu sebentar, lalu akses:
 # http://localhost:8100
 ```
-
+ 
 ### 9.2 Daily Development
-
+ 
 ```bash
 # Mulai container (jika belum jalan)
 docker compose -f docker/docker-compose.dev.yml up -d
-
+ 
 # Edit source code di host — langsung terlihat di container (bind mount)
 # Tidak perlu rebuild container untuk perubahan PHP/Twig
-
+ 
 # Jika mengubah package.json (add/remove dependency):
 docker exec -it smauii-opresent-app-dev bun install
-
+ 
 # Jika mengubah source TypeScript/CSS:
 docker exec -it smauii-opresent-app-dev bun run build
 ```
+ 
+> 📖 **Detail workflow**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric)
+ 
+> 📖 **Detail workflow**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Docker](docs/architecture.md#8-docker-architecture)
 
 ### 9.3 Vite HMR (Optional)
-
+ 
 ```bash
 # Uncomment port 8082 di docker-compose.dev.yml:
 #   - "8082:8080"
-
+ 
 # Jalankan di dalam container:
 docker exec -it smauii-opresent-app-dev bun run dev
-
+ 
 # Akses: http://localhost:5173 (atau via SSH tunnel)
 ```
-
+ 
 **Cara kerja HMR:**
 1. Vite dev server berjalan di `:5173` di dalam container
 2. Browser fetch modules dari Vite server (bukan Apache)
 3. Perubahan langsung terlihat tanpa reload
 4. Apache di `:80` tetap melayani halaman utama
+ 
+> 📖 **Detail HMR**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Vite Config](docs/architecture.md#3-pipeline-aset-vite)
 
 ### 9.4 Database Migration
-
+ 
 ```bash
 # Jalankan migration + seed
 docker exec -it smauii-opresent-app-dev php spark migrate
 docker exec -it smauii-opresent-app-dev php spark db:seed
-
+ 
 # Atau gunakan script yang sudah ada:
 docker exec -it smauii-opresent-app-dev bun run dev:setup
 ```
+ 
+> 📖 **Detail migration**: [Local Development](docs/LOCAL_DEVELOPMENT.md#4-database-migration) • [Docker](docs/architecture.md#8-docker-architecture)
+ 
+> 📖 **Detail migration**: [Local Development](docs/LOCAL_DEVELOPMENT.md#4-database-migration) • [Architecture](docs/architecture.md#8-docker-architecture)
 
 ---
 
 ## 10. Production Workflow
 
 ### 10.1 Deploy
-
+ 
 ```bash
 # Build image + start containers
 docker compose -f docker/docker-compose.yml up -d --build
-
+ 
 # Container akan:
 # 1. Install composer deps (jika vendor/ belum ada)
 # 2. Install bun deps (jika node_modules/ belum ada)
@@ -621,44 +645,56 @@ docker compose -f docker/docker-compose.yml up -d --build
 # 4. Set permissions writable/
 # 5. Start Apache
 ```
+ 
+> 📖 **Detail deploy**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#8-docker-architecture)
+ 
+> 📖 **Detail deploy**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#8-docker-architecture)
 
 ### 10.2 Update Code
-
+ 
 ```bash
 # Pull latest code (di host)
 git pull origin main
-
+ 
 # Rebuild image
 docker compose -f docker/docker-compose.yml up -d --build
-
+ 
 # Container baru akan build aset otomatis
 ```
+ 
+> 📖 **Detail update**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#8-docker-architecture)
+ 
+> 📖 **Detail update**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#8-docker-architecture)
 
 ### 10.3 Update Aset Tanpa Rebuild Image
-
+ 
 Jika hanya source TypeScript/CSS yang berubah:
-
+ 
 ```bash
 # Masuk ke container
 docker exec -it smauii-opresent-app bash
-
+ 
 # Build manual
 cd /var/www/html
 bun run build
-
+ 
 # Hapus Twig cache
 rm -rf writable/twig/*
 ```
+ 
+> 📖 **Detail update**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#8-docker-architecture)
+ 
+> 📖 **Detail update**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#8-docker-architecture)
 
 ### 10.4 Mengapa `docker cp` / `docker exec sed` TIDAK Cukup untuk Production
-
+ 
 Production menggunakan `COPY . /var/www/html/` di Dockerfile — source code dibakar
 (baked) ke dalam Docker image pada saat build. Perubahan yang dilakukan via
 `docker cp`, `docker exec sed -i`, atau edit langsung ke container yang sedang
 berjalan hanya hidup di container layer sementara (ephemeral layer).
-
+ 
 **Kenapa tidak persisten:**
-
+ 
 ```
 docker compose build --build
     │
@@ -668,59 +704,67 @@ Dockerfile: COPY . /var/www/html/    ← menggunakan file dari HOST filesystem
     ▼
 Container baru dibuat dari image baru  ← perubahan via docker cp HILANG
 ```
-
+ 
 **Workflow yang benar untuk production:**
-
+ 
 1. Edit file di **host filesystem** (atau via dev container dengan bind mount → otomatis sync ke host)
 2. **Rebuild image:** `docker compose -f docker/docker-compose.yml up -d --build`
 3. **Clear Twig cache** di container baru: `docker exec -it smauii-opresent-app rm -rf writable/twig/*`
-
+ 
 **Jangan pernah:** `docker cp` file ke production container lalu clear cache — itu
 hanya temporary dan akan hilang saat container recreate.
+ 
+> 📖 **Detail workflow**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#8-docker-architecture)
+ 
+> 📖 **Detail workflow**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#8-docker-architecture)
 
 ### 10.5 Entrypoint Conditional Build & Impikasinya
-
+ 
 Entrypoint hanya menjalankan `bun run build` jika `public/build/` belum ada:
-
+ 
 ```bash
 if [ ! -d "public/build" ]; then
     bun run build
 fi
 ```
-
+ 
 Masalah: Dockerfile `COPY . /var/www/html/` juga menyalin `public/build/` dari host
 jika direktori tersebut sudah ada di host. Akibatnya entrypoint melewati build
 karena sudah ada — meskipun isinya stale (build lama).
-
+ 
 **Solusi:** Selalu pastikan `public/build/` di host adalah hasil build terbaru
 sebelum rebuild image:
-
+ 
 ```bash
 # Di host atau dev container — pastikan build fresh
 bun run build    # atau: docker exec smauii-opresent-app-dev bun run build
-
+ 
 # Lalu rebuild production
 docker compose -f docker/docker-compose.yml up -d --build
 ```
-
+ 
 Alternatif: tambahkan `rm -rf public/build` di Dockerfile sebelum `COPY` agar
 entrypoint selalu rebuild, atau gunakan `.dockerignore` untuk exclude
 `public/build/` dari COPY (dan biarkan entrypoint yang build).
+ 
+> 📖 **Detail entrypoint**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#8-docker-architecture)
 
 ### 10.6 Monitoring
-
+ 
 ```bash
 # Logs
 docker compose -f docker/docker-compose.yml logs -f opresent-app
-
+ 
 # Masuk ke container
 docker exec -it smauii-opresent-app bash
-
+ 
 # Cek status
 ls public/build/              # Pastikan aset ter-build
 cat public/build/.vite/manifest.json  # Cek manifest
 curl -s localhost/login | grep assets  # Cek URL aset
 ```
+ 
+> 📖 **Detail monitoring**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#8-docker-architecture)
 
 ---
 
@@ -765,18 +809,20 @@ vendor/bin/phpunit
 ```
 
 ### 11.3 Pre-commit Checks
-
+ 
 ```bash
 # Full pipeline
 bun run typecheck && bun run lint && bun run build && bun run test
 ```
+ 
+> 📖 **Detail SDLC**: [Local Development](docs/LOCAL_DEVELOPMENT.md#6-daftar-perintah-cli-cheatsheet) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md#5-developer-experience-dx-tooling)
 
 ---
 
 ## 12. Daftar File Kunci
 
 ### Aset Pipeline
-
+ 
 | File | Fungsi | Siapa yang Memodifikasi |
 |------|--------|------------------------|
 | `vite.config.ts` | Konfigurasi build Vite | Developer |
@@ -785,189 +831,213 @@ bun run typecheck && bun run lint && bun run build && bun run test
 | `public/build/.vite/manifest.json` | Mapping source → output | Vite (otomatis) |
 | `public/build/assets/main-*.js` | Compiled JS bundle | Vite (otomatis) |
 | `public/build/assets/main-*.css` | Compiled CSS bundle | Vite (otomatis) |
+ 
+> 📖 **Detail pipeline**: [Architecture](docs/architecture.md#3-pipeline-aset-vite) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md#2-frontend-stack)
 
 ### PHP Integration
-
+ 
 | File | Fungsi | Siapa yang Memodifikasi |
 |------|--------|------------------------|
 | `app/Controllers/BaseController.php:55-105` | `vite()` + `vite_css()` helpers | Developer |
 | `app/Debug/TwigExceptionHandler.php:67-117` | Same helpers untuk error pages | Developer |
 | `app/Views/layouts/base.twig:9,11` | Template yang menggunakan helpers | Developer |
 | `public/.htaccess:4-7` | Apache rewrite `/assets/*` → `build/assets/*` | Developer |
+ 
+> 📖 **Detail integrasi**: [Architecture](docs/architecture.md#4-integrasi-vite--twig-php) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md#4-integrasi-vite--twig-php)
 
 ### Docker
-
+ 
 | File | Fungsi | Siapa yang Memodifikasi |
 |------|--------|------------------------|
 | `docker/Dockerfile` | Build image | Developer/DevOps |
 | `docker/docker-entrypoint.sh` | Auto-build saat startup | Developer/DevOps |
 | `docker/docker-compose.yml` | Production stack | Developer/DevOps |
 | `docker/docker-compose.dev.yml` | Development stack | Developer/DevOps |
+ 
+> 📖 **Detail Docker**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#10-production-workflow) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md#3-infrastructure--deployment)
 
 ### Environment
-
+ 
 | File | Fungsi | Di-commit? |
 |------|--------|-----------|
 | `.env.dev` | Development config | Ya (tanpa secrets) |
 | `.env.production` | Production config | TIDAK (secrets) |
 | `.env.example` | Template | Ya |
 | `.gitignore` | Exclusion rules | Ya |
+ 
+> 📖 **Detail environment**: [Local Development](docs/LOCAL_DEVELOPMENT.md#2-alur-instalasi-lokal) • [Production](docs/architecture.md#8-docker-architecture) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md#4-configuration-management)
 
 ---
 
 ## 13. Troubleshooting
 
 ### 13.1 Aset tidak muncul (404 pada /assets/*)
-
+ 
 ```bash
 # 1. Cek apakah file ada di filesystem
 ls public/build/assets/main-*.js
-
+ 
 # 2. Cek manifest
 cat public/build/.vite/manifest.json
-
+ 
 # 3. Cek .htaccess
 cat public/.htaccess
 # Pastikan ada RewriteRule untuk /assets/*
-
+ 
 # 4. Cek Apache mod_rewrite
 apache2ctl -M | grep rewrite
 # Harus ada: rewrite_module
-
+ 
 # 5. Build ulang
 bun run build
 ```
+ 
+> 📖 **Detail pipeline**: [Architecture](docs/architecture.md#3-pipeline-aset-vite) • [Local Development](docs/LOCAL_DEVELOPMENT.md#4-alur-kerja-workflow--caveats)
 
 ### 13.2 CSS tidak dimuat (halaman tanpa styling)
-
+ 
 ```bash
 # 1. Cek apakah vite_css() mengembalikan HTML
 #    Lihat source HTML: harus ada <link href="/assets/main-<hash>.css">
-
+ 
 # 2. Jika kosong, cek manifest
 cat public/build/.vite/manifest.json
 # Pastikan ada key "css": ["assets/main-<hash>.css"]
-
+ 
 # 3. Hapus Twig cache (production)
 rm -rf writable/twig/*
-
+ 
 # 4. Cek apakah base.twig memiliki {{ vite_css('main.ts')|raw }}
 ```
+ 
+> 📖 **Detail pipeline**: [Architecture](docs/architecture.md#4-integrasi-vite--twig-php) • [Local Development](docs/LOCAL_DEVELOPMENT.md#4-alur-kerja-workflow--caveats)
 
 ### 13.3 Error page tidak styled (tanpa Tailwind)
-
+ 
 ```bash
 # 1. Pastikan TwigExceptionHandler aktif
 #    app/Config/Exceptions.php → handler() mengembalikan TwigExceptionHandler
-
+ 
 # 2. Pastikan error templates ada
 ls app/Views/errors/404.twig
 ls app/Views/errors/500.twig
-
+ 
 # 3. Hapus Twig cache
 rm -rf writable/twig/*
-
+ 
 # 4. Cek Apache logs
 docker exec -it smauii-opresent-app cat /var/log/apache2/error.log
 ```
+ 
+> 📖 **Detail error pages**: [Architecture](docs/architecture.md#6-error-pages-twig) • [Local Development](docs/LOCAL_DEVELOPMENT.md#4-alur-kerja-workflow--caveats)
 
 ### 13.4 Dev container tidak start
-
+ 
 ```bash
 # 1. Cek logs
 docker compose -f docker/docker-compose.dev.yml logs opresent-app-dev
-
+ 
 # 2. Cek apakah database ready
 docker compose -f docker/docker-compose.dev.yml ps
-
+ 
 # 3. Rebuild
 docker compose -f docker/docker-compose.dev.yml up -d --build
 ```
+ 
+> 📖 **Detail setup**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Architecture](docs/architecture.md#8-docker-architecture)
 
 ### 13.5 Twig template tidak update di production (template lama masih ditampilkan)
-
+ 
 **Gejala:** File template sudah benar di host dan di container, tapi rendered HTML
 masih menampilkan versi lama.
-
+ 
 **Penyebab:** Twig compiled cache. Di production, `$cache = (ENVIRONMENT === 'production')`
 di `app/Config/Twig.php` mengaktifkan caching. Twig mengompilasi template `.twig`
 menjadi file PHP di `writable/twig/` — dan terus menggunakan versi yang sudah
 di-cache sampai dihapus.
-
+ 
 **PENTING:** Twig cache ada di `writable/twig/`, **BUKAN** `writable/cache/`.
-
+ 
 ```bash
 # Salah (tidak menghapus Twig cache):
 rm -rf writable/cache/*
-
+ 
 # Benar:
 rm -rf writable/twig/*
 ```
-
+ 
 **Debugging:**
-
+ 
 ```bash
 # 1. Cek apakah template yang sudah di-cache masih ada
 find /var/www/html/writable/twig -name "*.php" | head -5
-
+ 
 # 2. Cek apakah cached version memiliki class baru
 grep -l "hidden md:flex" /var/www/html/writable/twig/*/*.php
 # Jika tidak ditemukan → cache masih versi lama!
-
+ 
 # 3. Clear Twig cache
 rm -rf /var/www/html/writable/twig/*
-
+ 
 # 4. Verify
 curl -s http://localhost/<route> | grep "class-baru"
 ```
-
+ 
 **Prevention:** Selalu clear `writable/twig/*` saat deploy perubahan template ke
 production, baik melalui entrypoint script, CI/CD, maupun manual.
+ 
+> 📖 **Detail cache pitfall**: [Local Development](docs/LOCAL_DEVELOPMENT.md#4-alur-kerja-workflow--caveats) • [Architecture](docs/architecture.md#64-twig-cache) • [Production](docs/architecture.md#103-update-aset-tanpa-rebuild-image)
 
 ### 13.6 Production build menggunakan aset lama (stale assets)
-
+ 
 **Gejala:** CSS/JS berubah di source, tapi production masih menampilkan versi lama.
-
+ 
 **Penyebab:** Dua kemungkinan:
 1. `public/build/` di host sudah ada (build lama) → entrypoint skip `bun run build`
 2. Hanya `docker cp` file ke container tanpa rebuild image
-
+ 
 **Solusi:**
-
+ 
 ```bash
 # 1. Pastikan host memiliki build terbaru
 docker exec smauii-opresent-app-dev bun run build
-
+ 
 # 2. Rebuild production image (COPY akan mengambil build terbaru dari host)
 docker compose -f docker/docker-compose.yml up -d --build
-
+ 
 # 3. Clear Twig cache di container baru
 docker exec smauii-opresent-app rm -rf writable/twig/*
-
+ 
 # 4. Verifikasi
 docker exec smauii-opresent-app cat public/build/.vite/manifest.json
 ```
+ 
+> 📖 **Detail stale assets**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#103-update-aset-tanpa-rebuild-image)
 
 ### 13.7 Production build gagal
-
+ 
 ```bash
 # 1. Masuk ke container
 docker exec -it smauii-opresent-app bash
-
+ 
 # 2. Build manual
 cd /var/www/html
 bun install
 bun run build
-
+ 
 # 3. Cek error
 # Jika "out of memory":
 bun run build --minify=false  # Sementara disable minify
 ```
+ 
+> 📖 **Detail build**: [Local Development](docs/LOCAL_DEVELOPMENT.md#3-menjalankan-development-server-bun-centric) • [Production](docs/architecture.md#8-docker-architecture)
 
 ---
 
+---
+ 
 ## Ringkasan Prinsip
-
+ 
 1. **Source bersih** — `public/build/` di-gitignore, tidak pernah di-commit
 2. **URL bersih** — `/assets/...` bukan `/build/assets/...`
 3. **Build di container** — entrypoint auto-build saat startup
@@ -978,3 +1048,5 @@ bun run build --minify=false  # Sementara disable minify
 8. **Immutable production** — COPY source ke image, tidak bind mount
 9. **Template cache = `writable/twig/`** — bukan `writable/cache/`, clear saat deploy template
 10. **Production = rebuild image** — `docker cp`/`exec sed` tidak persisten, harus rebuild
+ 
+> 📖 **Referensi lengkap**: [Local Development](docs/LOCAL_DEVELOPMENT.md) • [Architecture & Naming](docs/ARCHITECTURE_AND_NAMING_PLAN.md) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md) • [Performance](docs/PERFORMANCE_ANALYSIS.md) • [Testing](docs/TESTING_GUIDE.md) • [Contributing](CONTRIBUTING.md)

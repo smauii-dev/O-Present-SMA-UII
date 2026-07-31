@@ -5,6 +5,8 @@
 **Status:** ✅ Resolved  
 **Versi Aplikasi:** CodeIgniter 4.7.4 + Myth Auth
 
+> 📚 **Referensi terkait**: [Architecture](docs/architecture.md) • [Local Development](docs/LOCAL_DEVELOPMENT.md) • [Tech Stack & DX](docs/TECH_STACK_AND_DX.md) • [Tech Stack Knowledge Base](docs/TECH_STACK_KNOWLEDGE_BASE.md) • [Testing Guide](docs/TESTING_GUIDE.md) • [Contributing](CONTRIBUTING.md)
+
 ---
 
 ## Executive Summary

@@ -12,10 +12,13 @@ class Cookie extends BaseConfig
     {
         parent::__construct();
 
-        // Behind proxy: use Lax for same-site, None only if explicitly HTTPS
-        // The Response will add Secure flag when request is actually secure
+        // Production sits behind HTTPS (nginx-proxy). Cookies must be Secure
+        // or browsers may drop them on cross-request navigation.
+        // Leave domain empty for host-only cookies unless cookie.domain is set
+        // in .env — forcing a Domain attribute is a common session-break cause.
         if (ENVIRONMENT === 'production') {
             $this->samesite = 'Lax';
+            $this->secure   = true;
             $this->domain   = env('cookie.domain', '') ?: $this->domain;
         }
     }
